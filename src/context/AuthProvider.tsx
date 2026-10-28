@@ -1,0 +1,37 @@
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import type { User } from '../interface/user'
+import * as authService from '../services/authService'
+import { AuthContext, type AuthContextValue } from './authContext'
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(() => authService.getCurrentUser())
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (user) root.dataset.role = user.role
+    else delete root.dataset.role
+  }, [user])
+
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      signIn: (email, password) => {
+        const result = authService.signIn(email, password)
+        if (result.ok) setUser(result.user)
+        return result
+      },
+      signUp: (data) => {
+        const result = authService.signUp(data)
+        if (result.ok) setUser(result.user)
+        return result
+      },
+      signOut: () => {
+        authService.signOut()
+        setUser(null)
+      },
+    }),
+    [user],
+  )
+
+  return <AuthContext value={value}>{children}</AuthContext>
+}
