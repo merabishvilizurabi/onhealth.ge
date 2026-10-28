@@ -1,1 +1,30 @@
 @import "tailwindcss";
+@theme inline {
+  --color-primary: var(--role-primary);
+  --color-primary-hover: var(--role-primary-hover);
+  --color-primary-soft: var(--role-primary-soft);
+}
+:root,
+[data-role="patient"] {
+  --role-primary: #2563eb;
+  --role-primary-hover: #1d4ed8;
+  --role-primary-soft: #eff6ff;
+}
+[data-role="doctor"] {
+  --role-primary: #16a34a;
+  --role-primary-hover: #15803d;
+  --role-primary-soft: #f0fdf4;
+}
+[data-role="clinic"] {
+  --role-primary: #dc2626;
+  --role-primary-hover: #b91c1c;
+  --role-primary-soft: #fef2f2;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
