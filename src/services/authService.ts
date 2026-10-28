@@ -1,3 +1,4 @@
+import { DEMO_USERS } from '../data/demoUsers'
 import type { User } from '../interface/user'
 import type { SignUpData } from '../validation/authValidation'
 import { readJSON, removeKey, writeJSON } from './storage'
@@ -7,15 +8,26 @@ const SESSION_KEY = 'onhealth.session'
 
 export type AuthResult = { ok: true; user: User } | { ok: false; error: string }
 
-function getUsers(): User[] {
-  return readJSON<User[]>(USERS_KEY, [])
+// Accounts registered in this browser.
+// Doctors registered before clinics existed have no "clinics" list, so we give them an empty one.
+function getStoredUsers(): User[] {
+  return readJSON<User[]>(USERS_KEY, []).map((user) =>
+    user.role === 'doctor' ? { ...user, clinics: user.clinics ?? [] } : user,
+  )
 }
+
+// Demo accounts + registered accounts. Demo accounts are never written to localStorage.
+export function getUsers(): User[] {
+  return [...DEMO_USERS, ...getStoredUsers()]
+}
+
 function buildUser(data: SignUpData): User {
+  const now = new Date().toISOString()
   const base = {
     id: crypto.randomUUID(),
     email: data.email,
     password: data.password,
-    createdAt: new Date().toISOString(),
+    createdAt: now,
   }
 
   switch (data.role) {
@@ -28,6 +40,8 @@ function buildUser(data: SignUpData): User {
         fullName: data.fullName,
         specialty: data.specialty,
         experienceYears: data.experienceYears,
+        // The chosen clinic still has to verify the doctor
+        clinics: [{ clinicId: data.clinicId, status: 'pending', joinedAt: now }],
       }
     case 'clinic':
       return {
@@ -49,8 +63,12 @@ export function signUp(data: SignUpData): AuthResult {
     return { ok: false, error: 'ამ ელ. ფოსტით ანგარიში უკვე არსებობს' }
   }
 
+  if (data.role === 'doctor' && !users.some((user) => user.role === 'clinic' && user.id === data.clinicId)) {
+    return { ok: false, error: 'არჩეული კლინიკა ვერ მოიძებნა' }
+  }
+
   const user = buildUser(data)
-  writeJSON(USERS_KEY, [...users, user])
+  writeJSON(USERS_KEY, [...getStoredUsers(), user])
   writeJSON(SESSION_KEY, user.id)
   return { ok: true, user }
 }

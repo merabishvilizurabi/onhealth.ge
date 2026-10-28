@@ -9,6 +9,7 @@ const MESSAGES = {
   confirmPassword: 'პაროლები არ ემთხვევა',
   phone: 'შეიყვანეთ 9-ნიშნა ნომერი, მაგ. 5XX XX XX XX',
   experience: 'შეიყვანეთ წლები 0-დან 70-მდე',
+  clinic: 'აირჩიეთ კლინიკა',
 }
 
 const text = () => z.string({ error: MESSAGES.required })
@@ -74,6 +75,7 @@ const doctorSchema = z
           .min(0, MESSAGES.experience)
           .max(70, MESSAGES.experience),
       ),
+    clinicId: text().min(1, MESSAGES.clinic),
   })
   .refine(passwordsMatch.check, passwordsMatch.options)
 

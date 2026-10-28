@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router'
 import { AuthLayout } from '../layouts/AuthLayout'
+import { MainLayout } from '../layouts/MainLayout'
 import { SignIn } from '../pages/auth/SignIn'
 import { SignUp } from '../pages/auth/SignUp'
 import { ClinicDashboard } from '../pages/clinic/ClinicDashboard'
@@ -13,7 +14,9 @@ import { ProtectedRoute } from './ProtectedRoute'
 export function AppRouter() {
   return (
     <Routes>
-      <Route path={PATHS.home} element={<Home />} />
+      <Route element={<MainLayout />}>
+        <Route path={PATHS.home} element={<Home />} />
+      </Route>
       <Route element={<GuestRoute />}>
         <Route element={<AuthLayout />}>
           <Route path={PATHS.signIn} element={<SignIn />} />

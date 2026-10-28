@@ -12,6 +12,8 @@ export interface FieldConfig {
   autoComplete?: string
   placeholder?: string
   options?: SelectOption[]
+  // Options that are only known at runtime (e.g. the list of registered clinics)
+  optionsFrom?: 'clinics'
   emptyOption?: string
 }
 
@@ -59,7 +61,15 @@ export const SIGN_UP_FORM: Record<Role, FormSection[]> = {
       fields: [
         { name: 'specialty', label: 'სპეციალობა', placeholder: 'მაგ. კარდიოლოგი' },
         { name: 'experienceYears', label: 'გამოცდილება (წელი)', type: 'number' },
+        {
+          name: 'clinicId',
+          label: 'კლინიკა',
+          type: 'select',
+          optionsFrom: 'clinics',
+          emptyOption: 'აირჩიეთ კლინიკა',
+        },
       ],
+      note: 'კლინიკა დაადასტურებს თქვენს ანგარიშს. სხვა კლინიკებს მოგვიანებით დაამატებთ პროფილიდან.',
     },
   ],
 
