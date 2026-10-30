@@ -1,9 +1,5 @@
 import type { DoctorSchedule, Weekday } from '../interface/booking'
 
-// Working hours of the demo doctors, so booking works on any computer without setup.
-// A doctor can change them on the schedule page; the change is saved in localStorage
-// and replaces the demo hours for that clinic.
-
 const schedule = (doctor: number, clinic: number, days: Weekday[], start: string, end: string): DoctorSchedule => ({
   doctorId: `demo-doctor-${doctor}`,
   clinicId: `demo-clinic-${clinic}`,

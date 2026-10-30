@@ -73,7 +73,7 @@ export function SignIn() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-gray-900">
         არ გაქვთ ანგარიში?{' '}
         <Link to={PATHS.signUp} state={location.state} className="font-medium text-primary hover:underline">
           რეგისტრაცია

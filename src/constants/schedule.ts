@@ -1,13 +1,11 @@
 import type { Weekday } from '../interface/booking'
 
-export const SLOT_MINUTES = 30 // length of one visit
-export const BOOKING_DAYS_AHEAD = 14 // how far ahead patients can book
+export const SLOT_MINUTES = 30
+export const BOOKING_DAYS_AHEAD = 14
 
-// Range of times a doctor can choose for working hours
 export const DAY_START = '07:00'
 export const DAY_END = '21:00'
 
-// Monday first, as Georgian calendars show it
 export const WEEKDAYS: { day: Weekday; label: string; short: string }[] = [
   { day: 1, label: 'ორშაბათი', short: 'ორშ' },
   { day: 2, label: 'სამშაბათი', short: 'სამ' },

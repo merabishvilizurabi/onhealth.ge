@@ -1,24 +1,79 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Noto Sans Georgian", ui-sans-serif, system-ui, sans-serif;
+
+  --color-gray-700: #3b475a;
+  --color-gray-800: #262f3d;
+  --color-gray-900: #1a202c;
+
+  --radius-lg: 4px;
+  --radius-xl: 10px;
+  --radius-2xl: 14px;
+}
+
 @theme inline {
   --color-primary: var(--role-primary);
   --color-primary-hover: var(--role-primary-hover);
   --color-primary-soft: var(--role-primary-soft);
+
+  --color-gray-50: var(--role-gray-50);
+  --color-gray-100: var(--role-gray-100);
+  --color-gray-200: var(--role-gray-200);
+  --color-gray-300: var(--role-gray-300);
+  --color-gray-400: var(--role-gray-400);
+  --color-gray-500: var(--role-gray-500);
+  --color-gray-600: var(--role-gray-600);
+
+  --color-surface: var(--role-gray-200);
+  --color-surface-strong: var(--role-gray-300);
+  --color-band: var(--role-band);
 }
+
 :root,
 [data-role="patient"] {
-  --role-primary: #2563eb;
-  --role-primary-hover: #1d4ed8;
-  --role-primary-soft: #eff6ff;
+  --role-primary: #486284;
+  --role-primary-hover: #3a506d;
+  --role-primary-soft: #e4eaf2;
+  --role-gray-50: #f6f8fb;
+  --role-gray-100: #eef2f6;
+  --role-gray-200: #dee5ed;
+  --role-gray-300: #ced7e4;
+  --role-gray-400: #90a3bf;
+  --role-gray-500: #6a7b94;
+  --role-gray-600: #526178;
+  --role-band: #d3dce7;
 }
 [data-role="doctor"] {
-  --role-primary: #16a34a;
-  --role-primary-hover: #15803d;
-  --role-primary-soft: #f0fdf4;
+  --role-primary: #3f6f5e;
+  --role-primary-hover: #325a4c;
+  --role-primary-soft: #e2ede8;
+  --role-gray-50: #f5f9f7;
+  --role-gray-100: #ecf3ef;
+  --role-gray-200: #dbe8e1;
+  --role-gray-300: #c9dbd1;
+  --role-gray-400: #8fa99c;
+  --role-gray-500: #6b8478;
+  --role-gray-600: #52685d;
+  --role-band: #d0e1d8;
 }
 [data-role="clinic"] {
-  --role-primary: #dc2626;
-  --role-primary-hover: #b91c1c;
-  --role-primary-soft: #fef2f2;
+  --role-primary: #8c4a55;
+  --role-primary-hover: #743c46;
+  --role-primary-soft: #f2e5e8;
+  --role-gray-50: #faf6f7;
+  --role-gray-100: #f4ecee;
+  --role-gray-200: #ecdde0;
+  --role-gray-300: #e0cbd0;
+  --role-gray-400: #b0959b;
+  --role-gray-500: #8a7076;
+  --role-gray-600: #6d575c;
+  --role-band: #e6d4d8;
+}
+
+body {
+  @apply bg-white font-sans text-gray-900 antialiased;
+  letter-spacing: -0.01em;
 }
 
 button {

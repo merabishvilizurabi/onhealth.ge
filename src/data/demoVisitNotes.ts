@@ -1,9 +1,6 @@
 import type { VisitNote } from '../interface/visitNote'
 import { DEMO_APPOINTMENTS } from './demoAppointments'
 
-// Doctors' notes for some past demo visits, so patients and doctors see examples.
-// Sign in as lasha@demo.onhealth.ge to see them in the visit history.
-
 const note = (visitNumber: number, diagnosis: string, prescription: string): VisitNote => {
   const visit = DEMO_APPOINTMENTS.find((a) => a.id === `demo-visit-${visitNumber}`)!
   return {

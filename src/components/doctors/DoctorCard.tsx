@@ -7,27 +7,24 @@ import { RatingBadge } from '../reviews/Stars'
 
 interface DoctorCardProps {
   doctor: PublicDoctor
-  summary: DoctorSummary // from getDoctorSummary()
-  footer?: ReactNode // optional extra content at the bottom
+  summary: DoctorSummary
+  footer?: ReactNode
 }
 
 export function DoctorCard({ doctor, summary, footer }: DoctorCardProps) {
-  const city = summary.hours[0]?.clinic.city // a doctor works in one city
+  const city = summary.hours[0]?.clinic.city
 
   return (
-    // The whole card is clickable: the name link is stretched over it.
-    // Links inside the footer sit above it with "relative z-10".
-    <article className="relative flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-colors hover:border-primary">
-      <div
-        aria-hidden="true"
-        className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-soft text-lg font-semibold text-primary"
-      >
-        {doctor.fullName.charAt(0)}
-      </div>
-
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <div>
-          <h3 className="truncate font-medium text-gray-900">
+    <article className="group relative flex flex-col gap-5 rounded-xl bg-surface p-6 transition-shadow hover:shadow-lg hover:shadow-primary/15">
+      <div className="flex items-start gap-4">
+        <div
+          aria-hidden="true"
+          className="flex size-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-semibold text-primary"
+        >
+          {doctor.fullName.charAt(0)}
+        </div>
+        <div className="min-w-0">
+          <h3 className="truncate text-xl font-bold tracking-tight">
             <Link
               to={doctorProfilePath(doctor.id)}
               className="after:absolute after:inset-0 after:rounded-xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-primary"
@@ -35,30 +32,45 @@ export function DoctorCard({ doctor, summary, footer }: DoctorCardProps) {
               {doctor.fullName}
             </Link>
           </h3>
-          <p className="text-sm text-primary">
+          <p className="text-sm font-medium text-primary">
             {doctor.specialty}
-            {city && <span className="text-gray-500"> · {city}</span>}
-          </p>
-          <p className="flex flex-wrap gap-x-3 text-sm text-gray-500">
-            <RatingBadge rating={summary.rating} />
-            <span>{doctor.experienceYears} წლის გამოცდილება</span>
+            {city && <span className="text-gray-900"> · {city}</span>}
           </p>
         </div>
+      </div>
 
-        {summary.hours.length > 0 && (
-          <ul className="flex flex-col gap-1 text-sm">
-            {summary.hours.map(({ clinic, lines }) => (
-              <li key={clinic.id}>
-                <span className="text-gray-700">{clinic.clinicName}</span>
-                <span className="block text-gray-500">{lines.length > 0 ? lines.join(' · ') : 'განრიგი ჯერ არ არის'}</span>
-              </li>
-            ))}
-          </ul>
+      <p className="flex flex-wrap gap-x-3 text-sm text-gray-900">
+        <RatingBadge rating={summary.rating} />
+        <span>{doctor.experienceYears} წლის გამოცდილება</span>
+      </p>
+
+      {summary.hours.length > 0 && (
+        <ul className="flex flex-col gap-2 rounded-lg bg-white/60 p-3 text-sm">
+          {summary.hours.map(({ clinic, lines }) => (
+            <li key={clinic.id}>
+              <span className="font-medium text-gray-900">{clinic.clinicName}</span>
+              <span className="block text-gray-900">{lines.length > 0 ? lines.join(' · ') : 'განრიგი ჯერ არ არის'}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="mt-auto flex items-center justify-between gap-3">
+        {summary.priceFrom !== null ? (
+          <p className="font-bold">
+            <span className="text-xl">{summary.priceFrom} ₾</span>
+            <span className="text-sm font-medium text-gray-900">-დან</span>
+          </p>
+        ) : (
+          <span />
         )}
-
-        {summary.priceFrom !== null && <p className="text-sm text-gray-700">ვიზიტი {summary.priceFrom} ₾-დან</p>}
-
-        {footer && <div className="relative z-10 text-sm">{footer}</div>}
+        {footer ? (
+          <div className="relative z-10 text-sm">{footer}</div>
+        ) : (
+          <span className="rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 transition-colors group-hover:bg-primary group-hover:text-white">
+            დაჯავშნა
+          </span>
+        )}
       </div>
     </article>
   )

@@ -8,10 +8,10 @@ import { formatDateLong } from '../../utils/time'
 interface VisitListProps {
   visits: Appointment[]
   patients: Map<string, Patient>
-  doctors?: Map<string, Doctor> // pass to show which doctor each visit is with
-  clinics?: Map<string, PublicClinic> // pass to show at which clinic (doctor dashboard)
-  renderExtra?: (visit: Appointment) => ReactNode // shown under the visit, e.g. the doctor's note
-  empty: string // text when there are no visits
+  doctors?: Map<string, Doctor>
+  clinics?: Map<string, PublicClinic>
+  renderExtra?: (visit: Appointment) => ReactNode
+  empty: string
 }
 
 function statusOf(visit: Appointment) {
@@ -22,12 +22,11 @@ function statusOf(visit: Appointment) {
     }
   }
   if (isUpcoming(visit)) return { label: 'დაგეგმილი', className: 'bg-primary-soft text-primary' }
-  return { label: 'ჩატარებული', className: 'bg-gray-100 text-gray-600' }
+  return { label: 'ჩატარებული', className: 'bg-gray-100 text-gray-900' }
 }
 
-// Visits with the patient's contact details, for the clinic and doctor dashboards
 export function VisitList({ visits, patients, doctors, clinics, renderExtra, empty }: VisitListProps) {
-  if (visits.length === 0) return <p className="text-sm text-gray-500">{empty}</p>
+  if (visits.length === 0) return <p className="text-sm text-gray-900">{empty}</p>
 
   return (
     <ul className="flex flex-col divide-y divide-gray-100 rounded-xl border border-gray-200 bg-white">
@@ -40,22 +39,22 @@ export function VisitList({ visits, patients, doctors, clinics, renderExtra, emp
           <li key={visit.id} className="grid gap-2 p-4 text-sm sm:grid-cols-[10rem_1fr_auto] sm:gap-x-4">
             <div>
               <p className="font-medium text-gray-900">{visit.time}</p>
-              <p className="text-gray-500">{formatDateLong(visit.date)}</p>
+              <p className="text-gray-900">{formatDateLong(visit.date)}</p>
             </div>
             <div className="flex min-w-0 flex-col gap-0.5">
               <p className="text-gray-900">
                 {patient?.fullName ?? 'პაციენტი'}
-                {patient && <span className="text-gray-500"> · {patient.phone}</span>}
+                {patient && <span className="text-gray-900"> · {patient.phone}</span>}
               </p>
-              {doctor && <p className="text-gray-500">ექიმი: {doctor.fullName}</p>}
-              {clinic && <p className="text-gray-500">{clinic.clinicName}</p>}
+              {doctor && <p className="text-gray-900">ექიმი: {doctor.fullName}</p>}
+              {clinic && <p className="text-gray-900">{clinic.clinicName}</p>}
               {visit.service && (
-                <p className="text-gray-500">
+                <p className="text-gray-900">
                   {visit.service.name} · {visit.service.price} ₾ ·{' '}
                   {visit.payment === 'online' ? 'გადახდილია ონლაინ' : 'გადახდა კლინიკაში'}
                 </p>
               )}
-              {visit.reason && <p className="text-gray-500">მიზეზი: {visit.reason}</p>}
+              {visit.reason && <p className="text-gray-900">მიზეზი: {visit.reason}</p>}
             </div>
             <span className={`self-start rounded-full px-2.5 py-0.5 text-xs font-medium ${status.className}`}>
               {status.label}

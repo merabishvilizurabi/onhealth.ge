@@ -6,7 +6,6 @@ import { Input } from '../ui/Input'
 
 const EMPTY = { currentPassword: '', password: '', confirmPassword: '' }
 
-// Change the password: the current one is needed first
 export function PasswordForm() {
   const { changePassword } = useAuth()
   const [values, setValues] = useState(EMPTY)

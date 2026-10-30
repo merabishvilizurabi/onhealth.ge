@@ -34,10 +34,9 @@ const byDateTime = (a: Appointment, b: Appointment) => `${a.date} ${a.time}`.loc
 
 const tabButton = (active: boolean) =>
   `-mb-px shrink-0 border-b-2 px-3 py-2 text-sm font-medium ${
-    active ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-primary'
+    active ? 'border-primary text-primary' : 'border-transparent text-gray-900 hover:text-primary'
   }`
 
-// The signed-in doctor's home. ?tab=… picks the tab; without it the visits are shown.
 export function DoctorDashboard() {
   const { user } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -47,8 +46,8 @@ export function DoctorDashboard() {
   const [appointments] = useState(() => getDoctorAppointments(doctorId))
   const [patients] = useState(getPatientsById)
   const [allClinics] = useState(getClinics)
-  const [writing, setWriting] = useState<string | null>(null) // visit id with the open note form
-  const [, setVersion] = useState(0) // bumped after saving a note
+  const [writing, setWriting] = useState<string | null>(null)
+  const [, setVersion] = useState(0)
   const [period, setPeriod] = useState(7)
 
   const upcoming = appointments.filter(isUpcoming).sort(byDateTime)
@@ -56,7 +55,7 @@ export function DoctorDashboard() {
   const upcomingPages = usePagination(upcoming, PAGE_SIZE)
   const pastPages = usePagination(past, PAGE_SIZE)
 
-  if (user?.role !== 'doctor') return null // ProtectedRoute lets only doctors in
+  if (user?.role !== 'doctor') return null
 
   const clinics = allClinics.filter((c) => user.clinics.some((m) => m.clinicId === c.id))
   const clinicsById = new Map(clinics.map((c) => [c.id, c]))
@@ -71,7 +70,6 @@ export function DoctorDashboard() {
     { label: 'შემოსავალი, 30 დღე', value: `${month.income} ₾` },
   ]
 
-  // Note under a completed visit: shown, written or edited here
   function renderNote(visit: Appointment) {
     if (!canWriteNote(visit)) return null
     const note = getVisitNote(visit.id)
@@ -92,12 +90,12 @@ export function DoctorDashboard() {
     return note ? (
       <div className="mt-1 flex flex-col gap-1 rounded-lg bg-gray-50 p-3 text-sm">
         <p>
-          <span className="text-gray-500">დიაგნოზი: </span>
+          <span className="text-gray-900">დიაგნოზი: </span>
           <span className="text-gray-900">{note.diagnosis}</span>
         </p>
         {note.prescription && (
           <p className="whitespace-pre-line">
-            <span className="text-gray-500">დანიშნულება: </span>
+            <span className="text-gray-900">დანიშნულება: </span>
             <span className="text-gray-900">{note.prescription}</span>
           </p>
         )}
@@ -125,11 +123,11 @@ export function DoctorDashboard() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10">
       <section className="flex flex-col gap-1">
-        <p className="text-sm text-gray-500">ექიმის პანელი</p>
+        <p className="text-sm text-gray-900">ექიმის პანელი</p>
         <h1 className="text-2xl font-semibold text-gray-900">{user.fullName}</h1>
         <p className="text-sm text-primary">
           {user.specialty}
-          <span className="text-gray-500"> · {clinics.map((c) => c.clinicName).join(', ') || 'კლინიკის გარეშე'}</span>
+          <span className="text-gray-900"> · {clinics.map((c) => c.clinicName).join(', ') || 'კლინიკის გარეშე'}</span>
         </p>
         {clinics.length > 0 && (
           <Link to={doctorProfilePath(user.id)} className="text-sm font-medium text-primary hover:underline">
@@ -141,7 +139,7 @@ export function DoctorDashboard() {
       <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {cards.map((card) => (
           <div key={card.label} className="rounded-xl border border-gray-200 bg-white p-4">
-            <dt className="text-sm text-gray-500">{card.label}</dt>
+            <dt className="text-sm text-gray-900">{card.label}</dt>
             <dd className="text-2xl font-semibold text-gray-900">{card.value}</dd>
           </div>
         ))}
@@ -175,7 +173,7 @@ export function DoctorDashboard() {
             <h2 id="past-title" className="text-lg font-semibold text-gray-900">
               ჩატარებული და გაუქმებული ვიზიტები
             </h2>
-            <p className="-mt-2 text-sm text-gray-500">დიაგნოზსა და დანიშნულებას პაციენტი ნახავს თავის პროფილზე.</p>
+            <p className="-mt-2 text-sm text-gray-900">დიაგნოზსა და დანიშნულებას პაციენტი ნახავს თავის პროფილზე.</p>
             <VisitList
               visits={pastPages.pageItems}
               patients={patients}
@@ -202,7 +200,7 @@ export function DoctorDashboard() {
                 role="radio"
                 aria-checked={period === days}
                 onClick={() => setPeriod(days)}
-                className={`rounded-md px-4 py-1.5 text-sm font-medium ${period === days ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+                className={`rounded-md px-4 py-1.5 text-sm font-medium ${period === days ? 'bg-primary text-white' : 'text-gray-900 hover:text-primary'}`}
               >
                 {days} დღე
               </button>
@@ -216,9 +214,9 @@ export function DoctorDashboard() {
               { label: 'მოსალოდნელი', value: `${stats.expectedIncome} ₾`, note: 'დაჯავშნილი ვიზიტები' },
             ].map((card) => (
               <div key={card.label} className="rounded-xl border border-gray-200 bg-white p-4">
-                <dt className="text-sm text-gray-500">{card.label}</dt>
+                <dt className="text-sm text-gray-900">{card.label}</dt>
                 <dd className="text-2xl font-semibold text-gray-900">{card.value}</dd>
-                {card.note && <dd className="text-xs text-gray-500">{card.note}</dd>}
+                {card.note && <dd className="text-xs text-gray-900">{card.note}</dd>}
               </div>
             ))}
           </dl>
@@ -234,7 +232,7 @@ export function DoctorDashboard() {
                   <li key={row.clinic.id} className="flex justify-between gap-3 p-4">
                     <span className="text-gray-900">
                       {row.clinic.clinicName}
-                      <span className="block text-gray-500">{row.visits} ვიზიტი</span>
+                      <span className="block text-gray-900">{row.visits} ვიზიტი</span>
                     </span>
                     <span className="font-semibold text-gray-900">{row.income} ₾</span>
                   </li>
@@ -247,7 +245,7 @@ export function DoctorDashboard() {
                 <div className="flex h-3 overflow-hidden rounded-full bg-gray-200" aria-hidden="true">
                   <div className="bg-primary" style={{ width: `${stats.visits > 0 ? (stats.online / stats.visits) * 100 : 0}%` }} />
                 </div>
-                <p className="flex justify-between text-gray-600">
+                <p className="flex justify-between text-gray-900">
                   <span>ონლაინ: {stats.online}</span>
                   <span>კლინიკაში: {stats.visits - stats.online}</span>
                 </p>

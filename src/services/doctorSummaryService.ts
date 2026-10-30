@@ -6,27 +6,23 @@ import { getFreeSlots } from './appointmentService'
 import { getRating } from './reviewService'
 import { getSchedule } from './scheduleService'
 
-// Everything a doctor card and the doctors page need, computed in one place
-
 interface ClinicHours {
   clinic: PublicClinic
-  lines: string[] // e.g. ["ორშ, ოთხ, პარ 10:00–14:00", "შაბ 11:00–15:00"]
+  lines: string[]
 }
 
-// Used by the doctors page (free-time filter, "nearest" sorting) and the recommendation score
 interface NextFreeTime {
-  date: string // "YYYY-MM-DD"
-  time: string // "HH:MM"
+  date: string
+  time: string
 }
 
 export interface DoctorSummary {
   rating: RatingSummary | null
-  priceFrom: number | null // cheapest service
+  priceFrom: number | null
   hours: ClinicHours[]
   next: NextFreeTime | null
 }
 
-// Groups days with the same hours: "ორშ, ოთხ 10:00–14:00"
 function hoursLines(doctorId: string, clinicId: string): string[] {
   const days = getSchedule(doctorId, clinicId)?.days ?? []
   const groups = new Map<string, string[]>()
@@ -39,7 +35,6 @@ function hoursLines(doctorId: string, clinicId: string): string[] {
   return [...groups].map(([range, names]) => `${names.join(', ')} ${range}`)
 }
 
-// The earliest free time (within the booking window) at any of these clinics
 function getNextFreeTime(doctorId: string, clinics: PublicClinic[]): NextFreeTime | null {
   const today = new Date()
   for (let i = 0; i < BOOKING_DAYS_AHEAD; i++) {
@@ -50,7 +45,6 @@ function getNextFreeTime(doctorId: string, clinics: PublicClinic[]): NextFreeTim
   return null
 }
 
-// clinics = the doctor's verified clinics (or just one, on a clinic's page)
 export function getDoctorSummary(doctor: PublicDoctor, clinics: PublicClinic[]): DoctorSummary {
   const prices = doctor.services.map((s) => s.price)
   return {

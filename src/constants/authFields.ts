@@ -21,7 +21,6 @@ interface FormSection {
   fields: FieldConfig[]
 }
 
-
 const fullName: FieldConfig = { name: 'fullName', label: 'სახელი და გვარი', autoComplete: 'name' }
 
 const phone: FieldConfig = {
@@ -39,8 +38,6 @@ const passwords: FieldConfig[] = [
   { name: 'confirmPassword', label: 'გაიმეორეთ პაროლი', type: 'password', autoComplete: 'new-password' },
 ]
 
-
-// Clinic details: on the sign-up form and on the clinic dashboard's edit form
 export const CLINIC_INFO_FIELDS: FieldConfig[] = [
   { name: 'clinicName', label: 'კლინიკის დასახელება', autoComplete: 'organization' },
   { name: 'city', label: 'ქალაქი', autoComplete: 'address-level2' },
@@ -70,7 +67,6 @@ export const SIGN_UP_FORM: Record<SignUpRole, FormSection[]> = {
   ],
 }
 
-// The form a clinic fills in to add a doctor (clinic dashboard). The doctor signs in with this email and password.
 export const DOCTOR_FORM: FormSection[] = [
   { title: 'ანგარიშის მონაცემები', fields: [fullName, phone, email, ...passwords] },
   {

@@ -7,7 +7,6 @@ import { Input } from '../ui/Input'
 
 type ServiceRow = { name: string; price: string }
 
-// The doctor's public details and services with prices (shown on the profile and the booking page)
 export function DoctorProfileForm({ doctor }: { doctor: Doctor }) {
   const { updateDoctor } = useAuth()
   const [values, setValues] = useState({
@@ -104,7 +103,7 @@ export function DoctorProfileForm({ doctor }: { doctor: Doctor }) {
             <button
               type="button"
               onClick={() => setServices((prev) => prev.filter((_, i) => i !== index))}
-              className="pb-2.5 text-sm font-medium text-gray-500 hover:text-red-600"
+              className="pb-2.5 text-sm font-medium text-gray-900 hover:text-red-600"
             >
               წაშლა
             </button>
@@ -118,7 +117,7 @@ export function DoctorProfileForm({ doctor }: { doctor: Doctor }) {
           + სერვისის დამატება
         </button>
         {errors.services && <p className="text-xs text-red-600">{errors.services}</p>}
-        <p className="text-xs text-gray-500">უკვე დაჯავშნილ ვიზიტებს ძველი ფასი შეუნარჩუნდებათ.</p>
+        <p className="text-xs text-gray-900">უკვე დაჯავშნილ ვიზიტებს ძველი ფასი შეუნარჩუნდებათ.</p>
       </fieldset>
 
       {errors.form && (

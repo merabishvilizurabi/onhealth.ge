@@ -15,7 +15,7 @@ export function Input({ label, error, id, type = 'text', className = '', ...prop
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
+      <label htmlFor={inputId} className="text-sm font-medium text-gray-900">
         {label}
       </label>
       <div className="relative">
@@ -32,7 +32,7 @@ export function Input({ label, error, id, type = 'text', className = '', ...prop
             type="button"
             onClick={() => setVisible((v) => !v)}
             aria-pressed={visible}
-            className="absolute inset-y-0 right-0 px-3 text-xs font-medium text-gray-500 hover:text-primary"
+            className="absolute inset-y-0 right-0 px-3 text-xs font-medium text-gray-900 hover:text-primary"
           >
             {visible ? 'დამალვა' : 'ჩვენება'}
           </button>

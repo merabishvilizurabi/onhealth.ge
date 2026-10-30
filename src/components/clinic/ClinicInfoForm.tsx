@@ -8,12 +8,11 @@ import { Input } from '../ui/Input'
 
 interface ClinicInfoFormProps {
   clinic: Clinic
-  hasDoctors: boolean // the city is locked while the clinic has doctors (a doctor works in one city)
+  hasDoctors: boolean
   onSaved: () => void
   onCancel: () => void
 }
 
-// Edit the clinic's name, city, address, phone and profile. The email (sign-in) stays the same.
 export function ClinicInfoForm({ clinic, hasDoctors, onSaved, onCancel }: ClinicInfoFormProps) {
   const { updateClinic } = useAuth()
   const [values, setValues] = useState<FormValues>({
@@ -53,7 +52,7 @@ export function ClinicInfoForm({ clinic, hasDoctors, onSaved, onCancel }: Clinic
             placeholder={field.placeholder}
             autoComplete={field.autoComplete}
             disabled={field.name === 'city' && hasDoctors}
-            className={field.name === 'city' && hasDoctors ? 'bg-gray-50 text-gray-500' : ''}
+            className={field.name === 'city' && hasDoctors ? 'bg-gray-50 text-gray-900' : ''}
             value={values[field.name] ?? ''}
             error={errors[field.name]}
             onChange={(e) => {
@@ -62,10 +61,10 @@ export function ClinicInfoForm({ clinic, hasDoctors, onSaved, onCancel }: Clinic
             }}
           />
         ))}
-        <Input label="ელ. ფოსტა (შესვლისთვის)" value={clinic.email} disabled readOnly className="bg-gray-50 text-gray-500" />
+        <Input label="ელ. ფოსტა (შესვლისთვის)" value={clinic.email} disabled readOnly className="bg-gray-50 text-gray-900" />
       </div>
       {hasDoctors && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-900">
           ქალაქს ვერ შეცვლით, სანამ კლინიკაში ექიმები არიან: ექიმი მხოლოდ ერთ ქალაქში მუშაობს.
         </p>
       )}

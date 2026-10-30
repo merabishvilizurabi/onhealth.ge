@@ -1,8 +1,8 @@
 import { createContext } from 'react'
 
 export interface CityContextValue {
-  cities: string[] // cities that have doctors
-  city: string // '' = all cities
+  cities: string[]
+  city: string
   setCity: (city: string) => void
 }
 

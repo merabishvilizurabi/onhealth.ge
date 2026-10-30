@@ -15,20 +15,17 @@ import { formatDateShort, toDateKey } from '../../utils/time'
 const byDateTime = (a: { date: string; time: string }, b: { date: string; time: string }) =>
   `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
 
-// The signed-in clinic's home: its doctors, today's visits, and adding new doctors
 export function ClinicDashboard() {
   const { user } = useAuth()
   const clinicId = user?.id ?? ''
 
-  // Re-read after adding or verifying a doctor
   const [doctors, setDoctors] = useState(() => getClinicDoctors(clinicId))
   const [appointments] = useState(() => getClinicAppointments(clinicId))
   const [patients] = useState(getPatientsById)
-  // One panel open at a time: adding a doctor or editing the clinic's details
   const [panel, setPanel] = useState<'addDoctor' | 'editInfo' | null>(null)
-  const [message, setMessage] = useState('') // shown after adding a doctor or saving details
+  const [message, setMessage] = useState('')
 
-  if (user?.role !== 'clinic') return null // ProtectedRoute lets only clinics in
+  if (user?.role !== 'clinic') return null
 
   const today = toDateKey(new Date())
   const verified = doctors.filter((d) => d.status === 'verified')
@@ -54,9 +51,9 @@ export function ClinicDashboard() {
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10">
       <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm text-gray-500">კლინიკის პანელი</p>
+          <p className="text-sm text-gray-900">კლინიკის პანელი</p>
           <h1 className="text-2xl font-semibold text-gray-900">{user.clinicName}</h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-900">
             {user.city}, {user.address} · {user.phone}
           </p>
           <Link to={clinicProfilePath(user.id)} className="text-sm font-medium text-primary hover:underline">
@@ -89,7 +86,7 @@ export function ClinicDashboard() {
       <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((stat) => (
           <div key={stat.label} className="rounded-xl border border-gray-200 bg-white p-4">
-            <dt className="text-sm text-gray-500">{stat.label}</dt>
+            <dt className="text-sm text-gray-900">{stat.label}</dt>
             <dd className="text-2xl font-semibold text-gray-900">{stat.value}</dd>
           </div>
         ))}
@@ -99,7 +96,6 @@ export function ClinicDashboard() {
       </Link>
 
       {panel === 'editInfo' && (
-        // Clinic details on the left, password on the right (like the doctor's profile tab)
         <div className="grid gap-6 lg:grid-cols-[1fr_22rem] lg:items-start">
           <ClinicInfoForm
             clinic={user}
@@ -143,7 +139,7 @@ export function ClinicDashboard() {
               >
                 <div>
                   <p className="font-medium text-gray-900">{doctor.fullName}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-900">
                     {doctor.specialty} · {doctor.email}
                   </p>
                 </div>
@@ -176,13 +172,12 @@ export function ClinicDashboard() {
                   </div>
                   <div className="min-w-0">
                     <h3 className="truncate font-medium text-gray-900">
-                      {/* Stretched link: the whole card opens the doctor */}
                       <Link to={clinicDoctorPath(doctor.id)} className="after:absolute after:inset-0 after:rounded-xl">
                         {doctor.fullName}
                       </Link>
                     </h3>
                     <p className="text-sm text-primary">{doctor.specialty}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-900">
                       {next ? `დაგეგმილი: ${count} · შემდეგი ${formatDateShort(next.date)}, ${next.time}` : 'დაგეგმილი ვიზიტი არ არის'}
                     </p>
                   </div>
@@ -191,7 +186,7 @@ export function ClinicDashboard() {
             })}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">ექიმები ჯერ არ გყავთ. დაამატეთ პირველი ექიმი.</p>
+          <p className="text-sm text-gray-900">ექიმები ჯერ არ გყავთ. დაამატეთ პირველი ექიმი.</p>
         )}
       </section>
 

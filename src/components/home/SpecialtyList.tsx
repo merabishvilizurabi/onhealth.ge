@@ -6,16 +6,15 @@ interface SpecialtyListProps {
   onSelect: (specialty: string | null) => void
 }
 
-// Clicking a specialty filters the doctors; clicking it again (or "ყველა") clears the filter
 export function SpecialtyList({ specialties, selected, onSelect }: SpecialtyListProps) {
-  const chip = (active: boolean) =>
-    `rounded-full border px-3 py-1.5 text-sm transition-colors ${
-      active ? 'border-primary bg-primary text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-primary hover:text-primary'
+  const tab = (active: boolean) =>
+    `-mb-px shrink-0 border-b-4 px-4 pb-3 text-base transition-colors md:text-lg ${
+      active ? 'border-primary font-semibold text-gray-900' : 'border-transparent font-medium text-gray-900'
     }`
 
   return (
-    <div className="flex flex-wrap gap-2">
-      <button type="button" aria-pressed={selected === null} onClick={() => onSelect(null)} className={chip(selected === null)}>
+    <div className="flex gap-2 overflow-x-auto border-b border-gray-300">
+      <button type="button" aria-pressed={selected === null} onClick={() => onSelect(null)} className={tab(selected === null)}>
         ყველა
       </button>
       {specialties.map(({ name, count }) => {
@@ -26,9 +25,9 @@ export function SpecialtyList({ specialties, selected, onSelect }: SpecialtyList
             type="button"
             aria-pressed={active}
             onClick={() => onSelect(active ? null : name)}
-            className={chip(active)}
+            className={tab(active)}
           >
-            {name} <span className={active ? 'text-white/80' : 'text-gray-400'}>{count}</span>
+            {name} <span className="text-sm text-gray-900">{count}</span>
           </button>
         )
       })}

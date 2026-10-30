@@ -8,7 +8,6 @@ import { getDoctorSummary } from '../../../services/doctorSummaryService'
 import { matchesQuery } from '../../../utils/search'
 import { addDays, toDateKey } from '../../../utils/time'
 
-// Filter and sort options (value '' = no filter)
 const FREE_TIME: SelectOption[] = [
   { value: 'today', label: 'დღეს' },
   { value: 'tomorrow', label: 'ხვალამდე' },
@@ -36,7 +35,6 @@ const EMPTY_FILTERS = { name: '', specialty: '', city: '', clinic: '', freeTime:
 type Filters = typeof EMPTY_FILTERS
 
 export function DoctorsPage() {
-  // Read once when the page opens, with each doctor's verified clinics and card summary
   const [rows] = useState(() => {
     const clinics = getClinics()
     return getListedDoctors().map((doctor) => {
@@ -49,7 +47,6 @@ export function DoctorsPage() {
   const [sort, setSort] = useState('rating')
   const set = (key: keyof Filters, value: string) => setFilters((prev) => ({ ...prev, [key]: value }))
 
-  // Dropdown options built from the data
   const specialtyOptions = useMemo(
     () => getSpecialties(rows.map((r) => r.doctor)).map((s) => ({ value: s.name, label: s.name })),
     [rows],
@@ -63,7 +60,6 @@ export function DoctorsPage() {
     .filter((c) => !filters.city || c.city === filters.city)
     .map((c) => ({ value: c.id, label: c.clinicName }))
 
-  // Latest date a free time may fall on for the "free time" filter
   const freeTimeLimit =
     filters.freeTime === 'today' ? toDateKey(new Date())
     : filters.freeTime === 'tomorrow' ? toDateKey(addDays(new Date(), 1))
@@ -84,7 +80,6 @@ export function DoctorsPage() {
     .sort((a, b) => {
       switch (sort) {
         case 'nearest': {
-          // doctors without free times go last
           const key = (r: typeof a) => (r.summary.next ? `${r.summary.next.date} ${r.summary.next.time}` : '9999')
           return key(a).localeCompare(key(b))
         }
@@ -95,7 +90,6 @@ export function DoctorsPage() {
         case 'name':
           return a.doctor.fullName.localeCompare(b.doctor.fullName, 'ka')
         default:
-          // rating: unrated doctors last, more reviews wins a tie
           return (
             (b.summary.rating?.average ?? 0) - (a.summary.rating?.average ?? 0) ||
             (b.summary.rating?.count ?? 0) - (a.summary.rating?.count ?? 0)
@@ -109,11 +103,10 @@ export function DoctorsPage() {
     <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10">
       <div>
         <h1 className="text-2xl font-semibold text-gray-900 md:text-3xl">ექიმები</h1>
-        <p className="mt-1 text-gray-600">გაფილტრეთ სპეციალობით, კლინიკით ან რეიტინგით და აირჩიეთ ექიმი.</p>
+        <p className="mt-1 text-gray-900">გაფილტრეთ სპეციალობით, კლინიკით ან რეიტინგით და აირჩიეთ ექიმი.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[16rem_1fr] lg:items-start">
-        {/* Filters: above the list on phones, a sidebar on large screens */}
         <aside aria-label="ფილტრები" className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-4">
           <Input
             label="ექიმის სახელი"
@@ -134,7 +127,6 @@ export function DoctorsPage() {
             emptyOption="ყველა ქალაქი"
             value={filters.city}
             onChange={(e) => {
-              // read the value now: the event is reset before the state update runs
               const city = e.currentTarget.value
               setFilters((prev) => ({ ...prev, city, clinic: '' }))
             }}
@@ -180,7 +172,7 @@ export function DoctorsPage() {
 
         <section aria-label="შედეგები" className="flex flex-col gap-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <p className="text-sm text-gray-600" aria-live="polite">
+            <p className="text-sm text-gray-900" aria-live="polite">
               ნაპოვნია {results.length} ექიმი
             </p>
             <div className="w-full sm:w-64">
@@ -195,7 +187,7 @@ export function DoctorsPage() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">ამ ფილტრებით ექიმი ვერ მოიძებნა.</p>
+            <p className="text-sm text-gray-900">ამ ფილტრებით ექიმი ვერ მოიძებნა.</p>
           )}
         </section>
       </div>

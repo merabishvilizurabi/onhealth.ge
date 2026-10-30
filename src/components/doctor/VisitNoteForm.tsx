@@ -10,12 +10,11 @@ import { Input } from '../ui/Input'
 interface VisitNoteFormProps {
   doctorId: string
   appointment: Appointment
-  note?: VisitNote // given when editing
+  note?: VisitNote
   onSaved: () => void
   onCancel: () => void
 }
 
-// Diagnosis + prescription for a completed visit. The patient sees it in their visit history.
 export function VisitNoteForm({ doctorId, appointment, note, onSaved, onCancel }: VisitNoteFormProps) {
   const [diagnosis, setDiagnosis] = useState(note?.diagnosis ?? '')
   const [prescription, setPrescription] = useState(note?.prescription ?? '')
@@ -47,7 +46,7 @@ export function VisitNoteForm({ doctorId, appointment, note, onSaved, onCancel }
         error={errors.diagnosis}
       />
       <div className="flex flex-col gap-1">
-        <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-gray-900">
           დანიშნულება (არასავალდებულო)
           <textarea
             value={prescription}

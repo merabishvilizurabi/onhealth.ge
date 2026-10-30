@@ -15,7 +15,6 @@ import { getDoctorSummary } from '../../services/doctorSummaryService'
 const PAGE_SIZE = 6
 const byDateTime = (a: Appointment, b: Appointment) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
 
-// One doctor as the clinic sees them: details, hours here, and visits at this clinic
 export function ClinicDoctor() {
   const { id = '' } = useParams()
   const { user } = useAuth()
@@ -32,7 +31,7 @@ export function ClinicDoctor() {
   const upcomingPages = usePagination(upcoming, PAGE_SIZE)
   const pastPages = usePagination(past, PAGE_SIZE)
 
-  if (user?.role !== 'clinic') return null // ProtectedRoute lets only clinics in
+  if (user?.role !== 'clinic') return null
 
   if (!entry) {
     return (
@@ -58,13 +57,13 @@ export function ClinicDoctor() {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10">
-      <Link to={PATHS.clinicDashboard} className="text-sm text-gray-500 hover:text-primary">
+      <Link to={PATHS.clinicDashboard} className="text-sm text-gray-900 hover:text-primary">
         ← ექიმები
       </Link>
 
       {status === 'pending' && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
-          <p className="text-sm text-gray-700">ექიმი ელოდება დადასტურებას. მანამდე ის საიტზე არ ჩანს ამ კლინიკაში.</p>
+          <p className="text-sm text-gray-900">ექიმი ელოდება დადასტურებას. მანამდე ის საიტზე არ ჩანს ამ კლინიკაში.</p>
           <Button
             onClick={() => {
               verifyDoctor(clinicId, doctor.id)
@@ -76,7 +75,6 @@ export function ClinicDoctor() {
         </div>
       )}
 
-      {/* Details on the left, numbers on the right */}
       <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
         <section className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5">
           <div className="flex items-center gap-4">
@@ -89,7 +87,7 @@ export function ClinicDoctor() {
             <div className="min-w-0">
               <h1 className="text-2xl font-semibold text-gray-900">{doctor.fullName}</h1>
               <p className="text-primary">{doctor.specialty}</p>
-              <p className="flex flex-wrap gap-x-3 text-sm text-gray-500">
+              <p className="flex flex-wrap gap-x-3 text-sm text-gray-900">
                 <RatingBadge rating={summary.rating} />
                 <span>{doctor.experienceYears} წლის გამოცდილება</span>
               </p>
@@ -98,19 +96,19 @@ export function ClinicDoctor() {
 
           <dl className="grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
             <div>
-              <dt className="text-gray-500">ელ. ფოსტა (შესვლისთვის)</dt>
+              <dt className="text-gray-900">ელ. ფოსტა (შესვლისთვის)</dt>
               <dd className="text-gray-900">{doctor.email}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">ტელეფონი</dt>
+              <dt className="text-gray-900">ტელეფონი</dt>
               <dd className="text-gray-900">{doctor.phone || '—'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">სამუშაო საათები ამ კლინიკაში</dt>
+              <dt className="text-gray-900">სამუშაო საათები ამ კლინიკაში</dt>
               <dd className="text-gray-900">{hours.length > 0 ? hours.join(' · ') : 'ექიმს განრიგი ჯერ არ შეუვსია'}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">სერვისები</dt>
+              <dt className="text-gray-900">სერვისები</dt>
               <dd className="text-gray-900">
                 {doctor.services.length > 0
                   ? doctor.services.map((s) => `${s.name} — ${s.price} ₾`).join(', ')
@@ -118,7 +116,7 @@ export function ClinicDoctor() {
               </dd>
             </div>
             <div>
-              <dt className="text-gray-500">ენები</dt>
+              <dt className="text-gray-900">ენები</dt>
               <dd className="text-gray-900">{doctor.languages.length > 0 ? doctor.languages.join(', ') : '—'}</dd>
             </div>
           </dl>
@@ -129,11 +127,10 @@ export function ClinicDoctor() {
             </Link>
           )}
 
-          {/* Removing: first click shows what will happen, second click removes */}
           <div className="flex flex-col gap-3 border-t border-gray-100 pt-4">
             {confirmRemove ? (
               <>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-gray-900">
                   {status === 'pending' ? 'ექიმის მოთხოვნა უარყოფილი იქნება.' : 'ექიმი აღარ გამოჩნდება თქვენს კლინიკაში.'}
                   {upcoming.length > 0 && ` გაუქმდება ${upcoming.length} დაგეგმილი ვიზიტი; პაციენტები ამას თავიანთ პროფილზე ნახავენ.`}{' '}
                   ექიმის ანგარიში, წარსული ვიზიტები და შეფასებები შენარჩუნდება.
@@ -158,7 +155,7 @@ export function ClinicDoctor() {
               <button
                 type="button"
                 onClick={() => setConfirmRemove(true)}
-                className="self-start text-sm font-medium text-gray-500 hover:text-red-600 hover:underline"
+                className="self-start text-sm font-medium text-gray-900 hover:text-red-600 hover:underline"
               >
                 {status === 'pending' ? 'მოთხოვნის უარყოფა' : 'ექიმის წაშლა კლინიკიდან'}
               </button>
@@ -169,7 +166,7 @@ export function ClinicDoctor() {
         <dl className="grid grid-cols-2 content-start gap-3">
           {stats.map((stat) => (
             <div key={stat.label} className="rounded-xl border border-gray-200 bg-white p-4">
-              <dt className="text-sm text-gray-500">{stat.label}</dt>
+              <dt className="text-sm text-gray-900">{stat.label}</dt>
               <dd className="text-2xl font-semibold text-gray-900">{stat.value}</dd>
             </div>
           ))}

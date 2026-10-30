@@ -15,7 +15,7 @@ export function Select({ label, options, emptyOption, error, id, className = '',
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={selectId} className="text-sm font-medium text-gray-700">
+      <label htmlFor={selectId} className="text-sm font-medium text-gray-900">
         {label}
       </label>
       <select

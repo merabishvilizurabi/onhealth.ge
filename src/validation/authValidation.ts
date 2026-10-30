@@ -21,7 +21,6 @@ const requiredText = text().trim().min(1, MESSAGES.required)
 
 const fullName = requiredText.refine(isFullName, MESSAGES.fullName)
 
-// Optional text: '' when left empty
 const optionalText = (max: number) =>
   z
     .string()
@@ -30,7 +29,6 @@ const optionalText = (max: number) =>
     .optional()
     .transform((value) => value ?? '')
 
-// "ქართული, ინგლისური" → ['ქართული', 'ინგლისური']
 const languageList = optionalText(200).transform((value) =>
   value
     .split(',')
@@ -63,12 +61,10 @@ const passwordsMatch = {
   options: { error: MESSAGES.confirmPassword, path: ['confirmPassword'] },
 }
 
-
 export const signInSchema = z.object({
   email,
   password: text().min(1, MESSAGES.required),
 })
-
 
 const patientSchema = z
   .object({
@@ -79,7 +75,6 @@ const patientSchema = z
   })
   .refine(passwordsMatch.check, passwordsMatch.options)
 
-// Clinic details: filled in at sign-up and editable later on the clinic dashboard
 const clinicInfoFields = {
   clinicName: requiredText,
   city: requiredText,
@@ -114,7 +109,6 @@ const price = requiredText
   .transform(Number)
   .pipe(z.number({ error: MESSAGES.price }).int(MESSAGES.price).min(1, MESSAGES.price).max(1000, MESSAGES.price))
 
-// The doctor's public details: filled in by the clinic when adding the doctor, editable by the doctor later
 const doctorInfoFields = {
   fullName,
   phone,
@@ -125,7 +119,6 @@ const doctorInfoFields = {
   languages: languageList,
 }
 
-// A clinic adds a doctor (clinic dashboard). The doctor is linked to that clinic, so there is no clinic field.
 export const doctorSchema = z
   .object({
     ...doctorInfoFields,
@@ -136,8 +129,6 @@ export const doctorSchema = z
 
 export type DoctorData = z.infer<typeof doctorSchema>
 
-// Doctor dashboard: the doctor edits their details and services. Service names must differ,
-// because a booking remembers the service by its name.
 export const doctorProfileSchema = z.object({
   ...doctorInfoFields,
   services: z
@@ -148,7 +139,6 @@ export const doctorProfileSchema = z.object({
 
 export type DoctorProfileData = z.infer<typeof doctorProfileSchema>
 
-// Profile page: a patient edits their name and phone (email stays the same, it is the sign-in)
 export const profileSchema = z.object({ fullName, phone })
 
 export type ProfileData = z.infer<typeof profileSchema>

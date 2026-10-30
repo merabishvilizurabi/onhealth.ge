@@ -6,9 +6,6 @@ import { CityContext, type CityContextValue } from './cityContext'
 
 const CITY_KEY = 'onhealth.city'
 
-// The city chosen in the header, remembered in this browser.
-// Only cities that have doctors can be chosen; a remembered city without doctors is ignored.
-// Clinics and doctors have no city picker, so for them every city is shown.
 export function CityProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   const usesCity = !user || user.role === 'patient'

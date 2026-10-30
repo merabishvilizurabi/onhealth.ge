@@ -13,23 +13,22 @@ import { canReview, deleteReview, getReviewForAppointment } from '../../services
 import { getVisitNote } from '../../services/visitNoteService'
 import { formatDateLong } from '../../utils/time'
 
-const PAGE_SIZE = 6 // visits per page, in each list
+const PAGE_SIZE = 6
 
 const byDateTime = (a: Appointment, b: Appointment) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
 
 interface PatientVisitsProps {
   patient: Patient
   appointments: Appointment[]
-  onChange: () => void // called after a cancel or a review, so the profile page re-reads its data
+  onChange: () => void
 }
 
-// Upcoming visits (can be cancelled) and visit history (can be reviewed)
 export function PatientVisits({ patient, appointments, onChange }: PatientVisitsProps) {
   const [doctors] = useState(getDoctors)
   const [clinics] = useState(getClinics)
-  const [reviewing, setReviewing] = useState<string | null>(null) // appointment id with the open review form
-  const [confirming, setConfirming] = useState<string | null>(null) // appointment id waiting for "cancel?" confirmation
-  const [deleting, setDeleting] = useState<string | null>(null) // review id waiting for "delete?" confirmation
+  const [reviewing, setReviewing] = useState<string | null>(null)
+  const [confirming, setConfirming] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
 
   const upcoming = appointments.filter(isUpcoming).sort(byDateTime)
   const history = appointments.filter((a) => !isUpcoming(a)).sort((a, b) => byDateTime(b, a))
@@ -54,7 +53,7 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
     const clinic = clinics.find((c) => c.id === appointment.clinicId)
     const cancelled = appointment.status === 'cancelled'
     const review = getReviewForAppointment(appointment.id)
-    const note = getVisitNote(appointment.id) // the doctor's diagnosis and prescription
+    const note = getVisitNote(appointment.id)
     const reviewable = canReview(appointment)
 
     return (
@@ -74,19 +73,19 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
                 <Link to={doctorProfilePath(doctor.id)} className="text-primary hover:underline">
                   {doctor.fullName}
                 </Link>
-                <span className="text-gray-500"> · {doctor.specialty}</span>
+                <span className="text-gray-900"> · {doctor.specialty}</span>
               </p>
             )}
             {doctor?.phone && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-900">
                 ექიმის ტელეფონი:{' '}
-                <a href={`tel:${doctor.phone.replace(/\s/g, '')}`} className="text-gray-700 hover:text-primary hover:underline">
+                <a href={`tel:${doctor.phone.replace(/\s/g, '')}`} className="text-gray-900 hover:text-primary hover:underline">
                   {doctor.phone}
                 </a>
               </p>
             )}
             {clinic && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-900">
                 <Link to={clinicProfilePath(clinic.id)} className="hover:text-primary hover:underline">
                   {clinic.clinicName}
                 </Link>
@@ -94,24 +93,23 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
               </p>
             )}
             {appointment.service && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-900">
                 {appointment.service.name} · {appointment.service.price} ₾ ·{' '}
                 {appointment.payment === 'online' ? 'გადახდა ონლაინ' : 'გადახდა კლინიკაში'}
               </p>
             )}
-            {appointment.reason && <p className="text-sm text-gray-500">მიზეზი: {appointment.reason}</p>}
+            {appointment.reason && <p className="text-sm text-gray-900">მიზეზი: {appointment.reason}</p>}
             {isUpcoming(appointment) && !cancellable && (
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-900">
                 გაუქმება შეუძლებელია: ვიზიტამდე {CANCEL_HOURS_BEFORE} საათზე ნაკლებია დარჩენილი
               </p>
             )}
           </div>
-          {/* First click asks "are you sure?", the second click cancels */}
           {cancellable && confirming !== appointment.id && (
             <button
               type="button"
               onClick={() => setConfirming(appointment.id)}
-              className="self-start rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:border-red-300 hover:text-red-600 sm:self-auto"
+              className="self-start rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:border-red-300 hover:text-red-600 sm:self-auto"
             >
               გაუქმება
             </button>
@@ -128,7 +126,7 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50"
               >
                 არა
               </button>
@@ -138,7 +136,7 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
             <button
               type="button"
               onClick={() => setReviewing(appointment.id)}
-              className="self-start rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:border-primary hover:text-primary sm:self-auto"
+              className="self-start rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:border-primary hover:text-primary sm:self-auto"
             >
               შეფასება
             </button>
@@ -149,24 +147,23 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
           <div className="flex flex-col gap-1 rounded-lg bg-primary-soft p-3 text-sm">
             <p className="font-medium text-gray-900">ექიმის დასკვნა</p>
             <p>
-              <span className="text-gray-500">დიაგნოზი: </span>
+              <span className="text-gray-900">დიაგნოზი: </span>
               <span className="text-gray-900">{note.diagnosis}</span>
             </p>
             {note.prescription && (
               <p className="whitespace-pre-line">
-                <span className="text-gray-500">დანიშნულება: </span>
+                <span className="text-gray-900">დანიშნულება: </span>
                 <span className="text-gray-900">{note.prescription}</span>
               </p>
             )}
           </div>
         )}
         {review && reviewing !== appointment.id && (
-          <div className="flex flex-col gap-2 text-sm text-gray-600 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-col gap-2 text-sm text-gray-900 sm:flex-row sm:items-start sm:justify-between">
             <p>
               თქვენი შეფასება: <Stars value={review.rating} />
-              {review.comment && <span className="block text-gray-500">„{review.comment}“</span>}
+              {review.comment && <span className="block text-gray-900">„{review.comment}“</span>}
             </p>
-            {/* Edit, or delete with a second click. Deleting keeps the visit in the history. */}
             <div className="flex shrink-0 gap-3">
               {deleting === review.id ? (
                 <>
@@ -177,7 +174,7 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
                   >
                     წავშალო?
                   </button>
-                  <button type="button" onClick={() => setDeleting(null)} className="font-medium text-gray-500 hover:underline">
+                  <button type="button" onClick={() => setDeleting(null)} className="font-medium text-gray-900 hover:underline">
                     არა
                   </button>
                 </>
@@ -193,7 +190,7 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
                   <button
                     type="button"
                     onClick={() => setDeleting(review.id)}
-                    className="font-medium text-gray-500 hover:text-red-600 hover:underline"
+                    className="font-medium text-gray-900 hover:text-red-600 hover:underline"
                   >
                     წაშლა
                   </button>
@@ -235,7 +232,7 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
             />
           </>
         ) : (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-900">
             დაჯავშნილი ვიზიტი არ გაქვთ.{' '}
             <Link to={PATHS.home} className="font-medium text-primary hover:underline">
               იპოვეთ ექიმი

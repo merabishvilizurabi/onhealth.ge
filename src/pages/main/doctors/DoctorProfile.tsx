@@ -31,11 +31,10 @@ export function DoctorProfile() {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10">
-      <Link to={PATHS.doctors} className="text-sm text-gray-500 hover:text-primary">
+      <Link to={PATHS.doctors} className="text-sm text-gray-900 hover:text-primary">
         ← ყველა ექიმი
       </Link>
 
-      {/* Main info */}
       <section className="flex items-center gap-5">
         <div
           aria-hidden="true"
@@ -46,7 +45,7 @@ export function DoctorProfile() {
         <div className="flex flex-col gap-0.5">
           <h1 className="text-2xl font-semibold text-gray-900 md:text-3xl">{doctor.fullName}</h1>
           <p className="text-primary">{doctor.specialty}</p>
-          <p className="flex flex-wrap gap-x-3 text-sm text-gray-500">
+          <p className="flex flex-wrap gap-x-3 text-sm text-gray-900">
             <RatingBadge rating={rating} />
             <span>{doctor.experienceYears} წლის გამოცდილება</span>
             {priceFrom !== null && <span>ვიზიტი {priceFrom} ₾-დან</span>}
@@ -54,34 +53,31 @@ export function DoctorProfile() {
         </div>
       </section>
 
-      {/* Two columns on large screens: information left, booking right */}
       <div className="grid gap-8 lg:grid-cols-[1fr_24rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-8">
-          {/* About */}
           {(doctor.bio || doctor.education || doctor.languages.length > 0) && (
             <section aria-labelledby="about-title" className="flex flex-col gap-2">
               <h2 id="about-title" className="text-lg font-semibold text-gray-900">
                 ექიმის შესახებ
               </h2>
-              {doctor.bio && <p className="text-gray-700">{doctor.bio}</p>}
+              {doctor.bio && <p className="text-gray-900">{doctor.bio}</p>}
               <dl className="flex flex-col gap-1 text-sm">
                 {doctor.education && (
                   <div>
-                    <dt className="inline text-gray-500">განათლება: </dt>
-                    <dd className="inline text-gray-700">{doctor.education}</dd>
+                    <dt className="inline text-gray-900">განათლება: </dt>
+                    <dd className="inline text-gray-900">{doctor.education}</dd>
                   </div>
                 )}
                 {doctor.languages.length > 0 && (
                   <div>
-                    <dt className="inline text-gray-500">ენები: </dt>
-                    <dd className="inline text-gray-700">{doctor.languages.join(', ')}</dd>
+                    <dt className="inline text-gray-900">ენები: </dt>
+                    <dd className="inline text-gray-900">{doctor.languages.join(', ')}</dd>
                   </div>
                 )}
               </dl>
             </section>
           )}
 
-          {/* Clinics + working hours */}
           <section aria-labelledby="clinics-title" className="flex flex-col gap-3">
             <h2 id="clinics-title" className="text-lg font-semibold text-gray-900">
               სად იღებს
@@ -97,13 +93,13 @@ export function DoctorProfile() {
                           {clinic.clinicName}
                         </Link>
                       </h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-900">
                         {clinic.city}, {clinic.address}
                       </p>
-                      <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="text-sm text-gray-500 hover:text-primary">
+                      <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="text-sm text-gray-900 hover:text-primary">
                         {clinic.phone}
                       </a>
-                      <ul className="mt-3 flex flex-col gap-0.5 text-sm text-gray-700">
+                      <ul className="mt-3 flex flex-col gap-0.5 text-sm text-gray-900">
                         {WEEKDAYS.filter((w) => days.some((d) => d.day === w.day)).map((w) => {
                           const day = days.find((d) => d.day === w.day)!
                           return (
@@ -112,18 +108,17 @@ export function DoctorProfile() {
                             </li>
                           )
                         })}
-                        {days.length === 0 && <li className="text-gray-500">განრიგი ჯერ არ არის</li>}
+                        {days.length === 0 && <li className="text-gray-900">განრიგი ჯერ არ არის</li>}
                       </ul>
                     </article>
                   )
                 })}
               </div>
             ) : (
-              <p className="text-sm text-gray-500">ექიმი ჯერ არცერთ კლინიკაში არ არის დადასტურებული.</p>
+              <p className="text-sm text-gray-900">ექიმი ჯერ არცერთ კლინიკაში არ არის დადასტურებული.</p>
             )}
           </section>
 
-          {/* Services */}
           {doctor.services.length > 0 && (
             <section aria-labelledby="services-title" className="flex flex-col gap-3">
               <h2 id="services-title" className="text-lg font-semibold text-gray-900">
@@ -132,7 +127,7 @@ export function DoctorProfile() {
               <ul className="divide-y divide-gray-200 rounded-xl border border-gray-200 bg-white">
                 {doctor.services.map((service) => (
                   <li key={service.name} className="flex justify-between gap-4 px-4 py-3 text-sm">
-                    <span className="text-gray-700">{service.name}</span>
+                    <span className="text-gray-900">{service.name}</span>
                     <span className="font-medium text-gray-900">{service.price} ₾</span>
                   </li>
                 ))}
@@ -140,7 +135,6 @@ export function DoctorProfile() {
             </section>
           )}
 
-          {/* Reviews */}
           <section aria-labelledby="reviews-title" className="flex flex-col gap-3">
             <h2 id="reviews-title" className="text-lg font-semibold text-gray-900">
               პაციენტების შეფასებები
@@ -152,19 +146,18 @@ export function DoctorProfile() {
                     <div className="flex flex-wrap items-center gap-x-3 text-sm">
                       <Stars value={review.rating} />
                       <span className="font-medium text-gray-900">{review.patientName}</span>
-                      <span className="text-gray-500">{formatDateLong(review.createdAt.slice(0, 10))}</span>
+                      <span className="text-gray-900">{formatDateLong(review.createdAt.slice(0, 10))}</span>
                     </div>
-                    {review.comment && <p className="mt-1 text-sm text-gray-700">{review.comment}</p>}
+                    {review.comment && <p className="mt-1 text-sm text-gray-900">{review.comment}</p>}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-gray-500">ამ ექიმს ჯერ შეფასებები არ აქვს.</p>
+              <p className="text-sm text-gray-900">ამ ექიმს ჯერ შეფასებები არ აქვს.</p>
             )}
           </section>
         </div>
 
-        {/* Booking */}
         <section
           aria-labelledby="booking-title"
           className="flex min-w-0 flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 lg:sticky lg:top-6"
