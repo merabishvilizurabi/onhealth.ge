@@ -4,9 +4,6 @@ interface RoleSelectorProps {
   value: Role
   onChange: (role: Role) => void
 }
-
-// Three buttons that behave like radio buttons. Each button carries its own
-// data-role, so it previews that role's color even before it is selected.
 export function RoleSelector({ value, onChange }: RoleSelectorProps) {
   return (
     <div role="radiogroup" aria-label="ანგარიშის ტიპი" className="grid grid-cols-3 gap-2">

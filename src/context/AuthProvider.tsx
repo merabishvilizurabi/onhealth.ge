@@ -29,6 +29,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         authService.signOut()
         setUser(null)
       },
+      // Profile page (patients). The header name updates right away.
+      updateProfile: (data) => {
+        if (!user) return { ok: false, error: 'შედით ანგარიშზე' }
+        const result = authService.updateProfile(user.id, data)
+        if (result.ok) setUser(result.user)
+        return result
+      },
+      changePassword: (data) => {
+        if (!user) return { ok: false, error: 'შედით ანგარიშზე' }
+        const result = authService.changePassword(user.id, data)
+        if (result.ok) setUser(result.user)
+        return result
+      },
     }),
     [user],
   )

@@ -12,10 +12,12 @@ export interface FieldConfig {
   autoComplete?: string
   placeholder?: string
   options?: SelectOption[]
+  // Options that are only known at runtime (e.g. the list of registered clinics)
+  optionsFrom?: 'clinics'
   emptyOption?: string
 }
 
-export interface FormSection {
+interface FormSection {
   title?: string
   note?: string
   fields: FieldConfig[]
@@ -59,6 +61,23 @@ export const SIGN_UP_FORM: Record<Role, FormSection[]> = {
       fields: [
         { name: 'specialty', label: 'სპეციალობა', placeholder: 'მაგ. კარდიოლოგი' },
         { name: 'experienceYears', label: 'გამოცდილება (წელი)', type: 'number' },
+        {
+          name: 'clinicId',
+          label: 'კლინიკა',
+          type: 'select',
+          optionsFrom: 'clinics',
+          emptyOption: 'აირჩიეთ კლინიკა',
+        },
+        { name: 'price', label: 'კონსულტაციის ფასი (₾)', type: 'number', placeholder: 'მაგ. 50' },
+      ],
+      note: 'კლინიკა დაადასტურებს თქვენს ანგარიშს. სხვა კლინიკებს მოგვიანებით დაამატებთ პროფილიდან.',
+    },
+    {
+      title: 'ჩემ შესახებ (არასავალდებულო)',
+      fields: [
+        { name: 'bio', label: 'მოკლე აღწერა', placeholder: 'რას მკურნალობთ, რა მომსახურებას სთავაზობთ' },
+        { name: 'education', label: 'განათლება', placeholder: 'მაგ. თსსუ, კარდიოლოგია' },
+        { name: 'languages', label: 'ენები', placeholder: 'ქართული, ინგლისური' },
       ],
     },
   ],
