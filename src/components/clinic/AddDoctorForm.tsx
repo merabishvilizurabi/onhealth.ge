@@ -20,8 +20,6 @@ const MODES: { value: Mode; label: string }[] = [
   { value: 'existing', label: 'უკვე რეგისტრირებული ექიმი' },
 ]
 
-// A new doctor: the clinic creates the account, and the doctor signs in with this email and password.
-// An existing doctor (e.g. moved from another clinic): found by email, keeps their reviews and rating.
 export function AddDoctorForm({ clinic, onAdded, onCancel }: AddDoctorFormProps) {
   const [mode, setMode] = useState<Mode>('new')
   const [values, setValues] = useState<FormValues>({})
@@ -72,7 +70,7 @@ export function AddDoctorForm({ clinic, onAdded, onCancel }: AddDoctorFormProps)
                 setErrors({})
               }}
               className={`rounded-md px-3 py-1.5 text-sm font-medium ${
-                mode === m.value ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'
+                mode === m.value ? 'bg-primary text-white' : 'text-gray-900 hover:text-primary'
               }`}
             >
               {m.label}
@@ -115,7 +113,7 @@ export function AddDoctorForm({ clinic, onAdded, onCancel }: AddDoctorFormProps)
             onChange={(e) => setExistingEmail(e.currentTarget.value)}
             autoComplete="off"
           />
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-900">
             ექიმი, რომელსაც უკვე აქვს ანგარიში OnHealth.ge-ზე. მისი შეფასებები და ისტორია შენარჩუნდება.
           </p>
         </div>

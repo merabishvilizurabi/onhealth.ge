@@ -28,26 +28,24 @@ export function ClinicProfile() {
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-10">
-      <Link to={PATHS.home} className="text-sm text-gray-500 hover:text-primary">
+      <Link to={PATHS.home} className="text-sm text-gray-900 hover:text-primary">
         ← მთავარი გვერდი
       </Link>
 
-      {/* Main info */}
       <section className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold text-gray-900 md:text-3xl">{clinic.clinicName}</h1>
         <p className="text-primary">{clinic.specialty}</p>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-900">
           {clinic.city}, {clinic.address}
         </p>
-        <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="self-start text-sm text-gray-600 hover:text-primary">
+        <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="self-start text-sm text-gray-900 hover:text-primary">
           {clinic.phone}
         </a>
       </section>
 
-      {/* Doctors */}
       <section aria-labelledby="clinic-doctors-title" className="flex flex-col gap-4">
         <h2 id="clinic-doctors-title" className="text-lg font-semibold text-gray-900">
-          ექიმები <span className="font-normal text-gray-500">· {doctors.length}</span>
+          ექიმები <span className="font-normal text-gray-900">· {doctors.length}</span>
         </h2>
 
         {specialties.length > 1 && (
@@ -57,7 +55,6 @@ export function ClinicProfile() {
         {shownDoctors.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {shownDoctors.map((doctor) => (
-              // Summary for this clinic only: hours and free times here
               <DoctorCard
                 key={doctor.id}
                 doctor={doctor}
@@ -74,7 +71,7 @@ export function ClinicProfile() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">ამ კლინიკაში ჯერ დადასტურებული ექიმი არ არის.</p>
+          <p className="text-sm text-gray-900">ამ კლინიკაში ჯერ დადასტურებული ექიმი არ არის.</p>
         )}
       </section>
     </div>

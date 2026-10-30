@@ -13,7 +13,6 @@ function getStoredSchedules(): DoctorSchedule[] {
   return Array.isArray(stored) ? (stored as DoctorSchedule[]) : []
 }
 
-// Saved schedules + demo schedules. A saved schedule replaces the demo one for the same doctor and clinic.
 function getSchedules(): DoctorSchedule[] {
   const stored = getStoredSchedules()
   const demo = DEMO_SCHEDULES.filter((d) => !stored.some((s) => sameSchedule(s, d)))
@@ -28,7 +27,6 @@ export function getSchedule(doctorId: string, clinicId: string): DoctorSchedule 
   return getSchedules().find((s) => sameSchedule(s, { doctorId, clinicId }))
 }
 
-// The weekday a new schedule overlaps with the doctor's hours at another clinic, or null
 export function findOverlap(doctorId: string, clinicId: string, days: WorkingDay[]): WorkingDay | null {
   const others = getDoctorSchedules(doctorId).filter((s) => s.clinicId !== clinicId)
   for (const day of days) {

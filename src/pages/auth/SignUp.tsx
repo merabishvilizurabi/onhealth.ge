@@ -99,7 +99,7 @@ export function SignUp() {
               <div className={`grid gap-4 ${hasManySections ? '' : 'md:grid-cols-2'}`}>
                 {section.fields.map(renderField)}
               </div>
-              {section.note && <p className="mt-3 text-xs text-gray-500">{section.note}</p>}
+              {section.note && <p className="mt-3 text-xs text-gray-900">{section.note}</p>}
             </fieldset>
           ))}
         </div>
@@ -115,7 +115,7 @@ export function SignUp() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-gray-900">
         უკვე გაქვთ ანგარიში?{' '}
         <Link to={PATHS.signIn} state={location.state} className="font-medium text-primary hover:underline">
           შესვლა

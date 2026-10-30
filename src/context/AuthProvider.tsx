@@ -29,7 +29,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         authService.signOut()
         setUser(null)
       },
-      // Profile page (patients). The header name updates right away.
       updateProfile: (data) => {
         if (!user) return { ok: false, error: 'შედით ანგარიშზე' }
         const result = authService.updateProfile(user.id, data)
@@ -42,14 +41,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (result.ok) setUser(result.user)
         return result
       },
-      // Clinic dashboard. The header name updates right away.
       updateClinic: (data) => {
         if (!user) return { ok: false, error: 'შედით ანგარიშზე' }
         const result = authService.updateClinic(user.id, data)
         if (result.ok) setUser(result.user)
         return result
       },
-      // Doctor dashboard. The header name updates right away.
       updateDoctor: (data) => {
         if (!user) return { ok: false, error: 'შედით ანგარიშზე' }
         const result = authService.updateDoctor(user.id, data)

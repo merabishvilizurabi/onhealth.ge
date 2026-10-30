@@ -14,8 +14,6 @@ export interface Patient extends BaseUser {
   phone: string
 }
 
-// A doctor's link to one clinic. "pending" until the clinic verifies the doctor.
-// A doctor can work at several clinics, but all in the same city.
 export type MembershipStatus = 'pending' | 'verified'
 
 export interface ClinicMembership {
@@ -24,20 +22,19 @@ export interface ClinicMembership {
   joinedAt: string
 }
 
-// One paid service a doctor offers, e.g. { name: 'პირველადი კონსულტაცია', price: 50 }
 export interface DoctorService {
   name: string
-  price: number // GEL
+  price: number
 }
 
 export interface Doctor extends BaseUser {
   role: 'doctor'
   fullName: string
-  phone: string // shown to the doctor's patients and clinics
+  phone: string
   specialty: string
   experienceYears: number
   clinics: ClinicMembership[]
-  bio: string // '' when not filled in
+  bio: string
   education: string
   languages: string[]
   services: DoctorService[]

@@ -10,7 +10,6 @@ import { findOverlap, getSchedule, saveSchedule } from '../../services/scheduleS
 import { fromMinutes, toMinutes } from '../../utils/time'
 import { workingDaySchema } from '../../validation/bookingValidation'
 
-// Every half hour from DAY_START to DAY_END, for the time dropdowns
 const TIME_OPTIONS: string[] = []
 for (let t = toMinutes(DAY_START); t <= toMinutes(DAY_END); t += SLOT_MINUTES) TIME_OPTIONS.push(fromMinutes(t))
 
@@ -65,7 +64,7 @@ function ClinicScheduleForm({ doctorId, clinic, membership }: { doctorId: string
     <section className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5">
       <div>
         <h2 className="text-lg font-semibold text-gray-900">{clinic.clinicName}</h2>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-900">
           {clinic.city}, {clinic.address}
         </p>
         {membership.status === 'pending' && (
@@ -79,7 +78,7 @@ function ClinicScheduleForm({ doctorId, clinic, membership }: { doctorId: string
           return (
             <li key={day} className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-3">
-                <label className="flex w-32 items-center gap-2 text-sm text-gray-700">
+                <label className="flex w-32 items-center gap-2 text-sm text-gray-900">
                   <input
                     type="checkbox"
                     checked={row.enabled}
@@ -99,7 +98,7 @@ function ClinicScheduleForm({ doctorId, clinic, membership }: { doctorId: string
                     <option key={t}>{t}</option>
                   ))}
                 </select>
-                <span className="text-gray-400">–</span>
+                <span className="text-gray-900">–</span>
                 <select
                   aria-label={`${label} — დასრულება`}
                   value={row.end}
@@ -120,13 +119,12 @@ function ClinicScheduleForm({ doctorId, clinic, membership }: { doctorId: string
 
       <div className="flex items-center gap-3">
         <Button onClick={handleSave}>შენახვა</Button>
-        {message && <p className="text-sm text-gray-600">{message}</p>}
+        {message && <p className="text-sm text-gray-900">{message}</p>}
       </div>
     </section>
   )
 }
 
-// Working hours per clinic. Shown as a tab of the doctor dashboard.
 export function DoctorSchedule() {
   const { user } = useAuth()
   const [clinics] = useState(getClinics)
@@ -136,11 +134,11 @@ export function DoctorSchedule() {
 
   return (
     <div className="flex max-w-3xl flex-col gap-6">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-900">
         მიუთითეთ სამუშაო დღეები და საათები თითოეულ კლინიკაში. ვიზიტი გრძელდება {SLOT_MINUTES} წუთი.
       </p>
 
-      {user.clinics.length === 0 && <p className="text-sm text-gray-500">თქვენ ჯერ არცერთ კლინიკას არ ეკუთვნით.</p>}
+      {user.clinics.length === 0 && <p className="text-sm text-gray-900">თქვენ ჯერ არცერთ კლინიკას არ ეკუთვნით.</p>}
 
       {user.clinics.map((membership) => {
         const clinic = clinics.find((c) => c.id === membership.clinicId)

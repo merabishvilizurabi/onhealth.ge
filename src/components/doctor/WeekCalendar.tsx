@@ -8,25 +8,23 @@ import { addDays, formatDateShort, fromDateKey, toDateKey, weekdayOf } from '../
 
 interface WeekCalendarProps {
   doctorId: string
-  clinics: PublicClinic[] // the doctor's clinics
+  clinics: PublicClinic[]
   appointments: Appointment[]
   patients: Map<string, Patient>
 }
 
-// Monday of the week that contains `date`
 function mondayOf(date: Date): Date {
-  const day = date.getDay() // 0 = Sunday
+  const day = date.getDay()
   return addDays(date, day === 0 ? -6 : 1 - day)
 }
 
-// One week, Monday to Sunday: working hours at each clinic and the booked visits
 export function WeekCalendar({ doctorId, clinics, appointments, patients }: WeekCalendarProps) {
-  const [weekOffset, setWeekOffset] = useState(0) // 0 = this week, 1 = next week …
+  const [weekOffset, setWeekOffset] = useState(0)
   const monday = addDays(mondayOf(new Date()), weekOffset * 7)
   const dates = Array.from({ length: 7 }, (_, i) => toDateKey(addDays(monday, i)))
   const today = toDateKey(new Date())
 
-  const navButton = 'rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:border-primary hover:text-primary'
+  const navButton = 'rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 hover:border-primary hover:text-primary'
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,7 +67,7 @@ export function WeekCalendar({ doctorId, clinics, appointments, patients }: Week
                 {isToday && <span className="font-normal"> · დღეს</span>}
               </p>
               {hours.length === 0 ? (
-                <p className="text-xs text-gray-400">დასვენება</p>
+                <p className="text-xs text-gray-900">დასვენება</p>
               ) : (
                 hours.map((h) => (
                   <p key={h.clinic.id} className="rounded-md bg-primary-soft px-2 py-1 text-xs text-primary">
@@ -83,7 +81,7 @@ export function WeekCalendar({ doctorId, clinics, appointments, patients }: Week
                   {visits.map((v) => (
                     <li key={v.id} className="rounded-md border border-gray-100 px-2 py-1 text-xs">
                       <span className="font-medium text-gray-900">{v.time}</span>{' '}
-                      <span className="text-gray-600">{patients.get(v.patientId)?.fullName ?? 'პაციენტი'}</span>
+                      <span className="text-gray-900">{patients.get(v.patientId)?.fullName ?? 'პაციენტი'}</span>
                     </li>
                   ))}
                 </ul>

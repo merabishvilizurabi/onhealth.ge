@@ -4,8 +4,6 @@ import { getClinicDoctors } from './clinicService'
 import { getRating } from './reviewService'
 import { getPeriodStats, priceOf, sumIncome, type PeriodStats } from './statsService'
 
-// Numbers for the clinic's statistics page
-
 interface DoctorStats {
   doctor: Doctor
   visits: number
@@ -21,11 +19,10 @@ interface ServiceStats {
 }
 
 export interface ClinicStats extends PeriodStats {
-  doctors: DoctorStats[] // highest income first
-  services: ServiceStats[] // most visits first
+  doctors: DoctorStats[]
+  services: ServiceStats[]
 }
 
-// `period` days ending today
 export function getClinicStats(clinicId: string, period: number): ClinicStats {
   const stats = getPeriodStats(getClinicAppointments(clinicId), period)
 

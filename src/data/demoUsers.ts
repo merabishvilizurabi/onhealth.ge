@@ -1,9 +1,5 @@
 import type { Clinic, ClinicMembership, Doctor, DoctorService, MembershipStatus, Patient } from '../interface/user'
 
-// Built-in demo accounts. They are always available (also on a computer with empty
-// localStorage), so the main page is never empty and every role can be shown in a demo.
-// All demo accounts use the password: demo1234
-
 const DEMO_PASSWORD = 'demo1234'
 const CREATED_AT = '2026-10-01T00:00:00.000Z'
 
@@ -58,7 +54,6 @@ const DEMO_CLINICS: Clinic[] = [
   },
 ]
 
-// Demo doctors are already verified by their clinics, except where "pending" is passed
 const member = (clinicNumber: number, status: MembershipStatus = 'verified'): ClinicMembership => ({
   clinicId: `demo-clinic-${clinicNumber}`,
   status,
@@ -96,8 +91,6 @@ const doctor = (
 const KA_EN = ['ქართული', 'ინგლისური']
 const KA_RU = ['ქართული', 'რუსული']
 
-// Clinic 1 = ცენტრალური (თბილისი), 2 = ზღვისპირა (ბათუმი), 3 = იმერეთის (ქუთაისი), 4 = ვაკის (თბილისი).
-// A doctor works in one city only: all of a doctor's clinics are in the same city.
 const DEMO_DOCTORS: Doctor[] = [
   doctor(1, 'ნინო გელაშვილი', 'კარდიოლოგი', 12, [member(1), member(4)], {
     bio: 'გულის რითმის დარღვევები, არტერიული წნევა, ეკგ და გულის ექოსკოპია.',
@@ -181,7 +174,6 @@ const patient = (id: number, email: string, fullName: string, phone: string): Pa
   phone,
 })
 
-// Demo patients. Their past visits and reviews are in demoAppointments.ts and demoReviews.ts.
 export const DEMO_PATIENTS: Patient[] = [
   patient(1, 'patient', 'სანდრო კვარაცხელია', '555 00 00 10'),
   patient(2, 'lasha', 'ლაშა ბერიძე', '555 00 00 11'),

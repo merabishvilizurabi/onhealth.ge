@@ -5,7 +5,6 @@ import { profileSchema, validate, type FormErrors } from '../../validation/authV
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 
-// Edit name and phone. The email is the sign-in, so it is shown but can't be changed.
 export function AccountForm({ patient }: { patient: Patient }) {
   const { updateProfile } = useAuth()
   const [fullName, setFullName] = useState(patient.fullName)
@@ -49,7 +48,7 @@ export function AccountForm({ patient }: { patient: Patient }) {
         error={errors.phone}
         autoComplete="tel"
       />
-      <Input label="ელ. ფოსტა" value={patient.email} disabled readOnly className="bg-gray-50 text-gray-500" />
+      <Input label="ელ. ფოსტა" value={patient.email} disabled readOnly className="bg-gray-50 text-gray-900" />
 
       {errors.form && (
         <p role="alert" className="text-sm text-red-600">

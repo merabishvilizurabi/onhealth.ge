@@ -10,12 +10,11 @@ import { Button } from '../ui/Button'
 interface ReviewFormProps {
   patient: Patient
   appointment: Appointment
-  review?: Review // given when editing an existing review
+  review?: Review
   onDone: () => void
   onCancel: () => void
 }
 
-// 1–5 stars + an optional comment for one past visit. Also used to edit a review.
 export function ReviewForm({ patient, appointment, review, onDone, onCancel }: ReviewFormProps) {
   const [rating, setRating] = useState<number>(review?.rating ?? 0)
   const [comment, setComment] = useState(review?.comment ?? '')
@@ -57,7 +56,7 @@ export function ReviewForm({ patient, appointment, review, onDone, onCancel }: R
           </button>
         ))}
       </div>
-      <label className="flex flex-col gap-1 text-sm text-gray-700">
+      <label className="flex flex-col gap-1 text-sm text-gray-900">
         კომენტარი (არასავალდებულო)
         <textarea
           value={comment}

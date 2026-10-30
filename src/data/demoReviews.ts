@@ -2,9 +2,6 @@ import type { Review } from '../interface/review'
 import { DEMO_APPOINTMENTS } from './demoAppointments'
 import { DEMO_PATIENTS } from './demoUsers'
 
-// Reviews the demo patients wrote after their visits (demoAppointments.ts).
-// Each review belongs to one visit: same patient, doctor and date.
-
 const review = (visitNumber: number, rating: Review['rating'], comment: string): Review => {
   const visit = DEMO_APPOINTMENTS.find((a) => a.id === `demo-visit-${visitNumber}`)!
   const patient = DEMO_PATIENTS.find((p) => p.id === visit.patientId)!

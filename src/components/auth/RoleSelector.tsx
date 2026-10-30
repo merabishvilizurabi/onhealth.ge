@@ -20,7 +20,7 @@ export function RoleSelector({ value, onChange }: RoleSelectorProps) {
             className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
               selected
                 ? 'border-primary bg-primary text-white'
-                : 'border-gray-300 text-gray-600 hover:border-primary hover:text-primary'
+                : 'border-gray-300 text-gray-900 hover:border-primary hover:text-primary'
             }`}
           >
             {ROLE_LABELS[role]}

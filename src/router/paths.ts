@@ -17,8 +17,7 @@ export const PATHS = {
 
 export const doctorProfilePath = (id: string) => `/doctors/${id}`
 export const clinicProfilePath = (id: string) => `/clinics/${id}`
-export const clinicDoctorPath = (id: string) => `/clinic/doctors/${id}` // a doctor's page inside the clinic dashboard
-// The booking page for a chosen clinic, date and time
+export const clinicDoctorPath = (id: string) => `/clinic/doctors/${id}`
 export const bookingPath = (doctorId: string, slot: { clinic: string; date: string; time: string }) =>
   `/book/${doctorId}?${new URLSearchParams(slot)}`
 export const HOME_BY_ROLE: Record<Role, string> = {
