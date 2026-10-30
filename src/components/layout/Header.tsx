@@ -8,13 +8,13 @@ import { LogoMark } from './LogoMark'
 export function Header() {
   const { user, signOut } = useAuth()
   const { pathname } = useLocation()
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  useEffect(() => setMenuOpen(false), [pathname])
+  const [menuOpenOn, setMenuOpenOn] = useState<string | null>(null)
+  const menuOpen = menuOpenOn === pathname
+  const setMenuOpen = (open: boolean) => setMenuOpenOn(open ? pathname : null)
 
   useEffect(() => {
     if (!menuOpen) return
-    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && setMenuOpen(false)
+    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && setMenuOpenOn(null)
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [menuOpen])
@@ -93,7 +93,7 @@ export function Header() {
           aria-label={menuOpen ? 'მენიუს დახურვა' : 'მენიუს გახსნა'}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
-          onClick={() => setMenuOpen((open) => !open)}
+          onClick={() => setMenuOpen(!menuOpen)}
           className="flex size-10 items-center justify-center rounded-lg text-gray-900 hover:bg-gray-100 md:hidden"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
