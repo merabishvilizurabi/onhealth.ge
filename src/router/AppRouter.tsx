@@ -4,8 +4,9 @@ import { MainLayout } from '../layouts/MainLayout'
 import { SignIn } from '../pages/auth/SignIn'
 import { SignUp } from '../pages/auth/SignUp'
 import { ClinicDashboard } from '../pages/clinic/ClinicDashboard'
+import { ClinicDoctor } from '../pages/clinic/ClinicDoctor'
+import { ClinicStats } from '../pages/clinic/ClinicStats'
 import { DoctorDashboard } from '../pages/doctor/DoctorDashboard'
-import { DoctorSchedule } from '../pages/doctor/DoctorSchedule'
 import { DoctorProfile } from '../pages/main/doctors/DoctorProfile'
 import { DoctorsPage } from '../pages/main/doctors/DoctorsPage'
 import { ClinicProfile } from '../pages/main/clinics/ClinicProfile'
@@ -30,7 +31,12 @@ export function AppRouter() {
           <Route path={PATHS.book} element={<BookingPage />} />
         </Route>
         <Route element={<ProtectedRoute allow={['doctor']} />}>
-          <Route path={PATHS.doctorSchedule} element={<DoctorSchedule />} />
+          <Route path={PATHS.doctorDashboard} element={<DoctorDashboard />} />
+        </Route>
+        <Route element={<ProtectedRoute allow={['clinic']} />}>
+          <Route path={PATHS.clinicDashboard} element={<ClinicDashboard />} />
+          <Route path={PATHS.clinicDoctor} element={<ClinicDoctor />} />
+          <Route path={PATHS.clinicStats} element={<ClinicStats />} />
         </Route>
       </Route>
       <Route element={<GuestRoute />}>
@@ -38,12 +44,6 @@ export function AppRouter() {
           <Route path={PATHS.signIn} element={<SignIn />} />
           <Route path={PATHS.signUp} element={<SignUp />} />
         </Route>
-      </Route>
-      <Route element={<ProtectedRoute allow={['doctor']} />}>
-        <Route path={PATHS.doctorDashboard} element={<DoctorDashboard />} />
-      </Route>
-      <Route element={<ProtectedRoute allow={['clinic']} />}>
-        <Route path={PATHS.clinicDashboard} element={<ClinicDashboard />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

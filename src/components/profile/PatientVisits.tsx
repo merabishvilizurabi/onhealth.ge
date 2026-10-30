@@ -10,6 +10,7 @@ import { PATHS, clinicProfilePath, doctorProfilePath } from '../../router/paths'
 import { CANCEL_HOURS_BEFORE, canCancel, cancelAppointment, isUpcoming } from '../../services/appointmentService'
 import { getClinics, getDoctors } from '../../services/directoryService'
 import { canReview, deleteReview, getReviewForAppointment } from '../../services/reviewService'
+import { getVisitNote } from '../../services/visitNoteService'
 import { formatDateLong } from '../../utils/time'
 
 const PAGE_SIZE = 6 // visits per page, in each list
@@ -53,6 +54,7 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
     const clinic = clinics.find((c) => c.id === appointment.clinicId)
     const cancelled = appointment.status === 'cancelled'
     const review = getReviewForAppointment(appointment.id)
+    const note = getVisitNote(appointment.id) // the doctor's diagnosis and prescription
     const reviewable = canReview(appointment)
 
     return (
@@ -61,7 +63,11 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
           <div>
             <p className="font-medium text-gray-900">
               {formatDateLong(appointment.date)}, {appointment.time}
-              {cancelled && <span className="ms-2 text-sm font-normal text-red-600">გაუქმებული</span>}
+              {cancelled && (
+                <span className="ms-2 text-sm font-normal text-red-600">
+                  {appointment.cancelledBy === 'clinic' ? 'გაუქმებულია კლინიკის მიერ' : 'გაუქმებული'}
+                </span>
+              )}
             </p>
             {doctor && (
               <p className="text-sm">
@@ -69,6 +75,14 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
                   {doctor.fullName}
                 </Link>
                 <span className="text-gray-500"> · {doctor.specialty}</span>
+              </p>
+            )}
+            {doctor?.phone && (
+              <p className="text-sm text-gray-500">
+                ექიმის ტელეფონი:{' '}
+                <a href={`tel:${doctor.phone.replace(/\s/g, '')}`} className="text-gray-700 hover:text-primary hover:underline">
+                  {doctor.phone}
+                </a>
               </p>
             )}
             {clinic && (
@@ -131,6 +145,21 @@ export function PatientVisits({ patient, appointments, onChange }: PatientVisits
           )}
         </div>
 
+        {note && (
+          <div className="flex flex-col gap-1 rounded-lg bg-primary-soft p-3 text-sm">
+            <p className="font-medium text-gray-900">ექიმის დასკვნა</p>
+            <p>
+              <span className="text-gray-500">დიაგნოზი: </span>
+              <span className="text-gray-900">{note.diagnosis}</span>
+            </p>
+            {note.prescription && (
+              <p className="whitespace-pre-line">
+                <span className="text-gray-500">დანიშნულება: </span>
+                <span className="text-gray-900">{note.prescription}</span>
+              </p>
+            )}
+          </div>
+        )}
         {review && reviewing !== appointment.id && (
           <div className="flex flex-col gap-2 text-sm text-gray-600 sm:flex-row sm:items-start sm:justify-between">
             <p>

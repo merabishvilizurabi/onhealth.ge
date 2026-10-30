@@ -18,13 +18,26 @@ function getStoredAppointments(): Appointment[] {
   return Array.isArray(stored) ? (stored as Appointment[]) : []
 }
 
-// Demo visits + booked appointments. Demo visits are never written to localStorage.
+// Demo visits + booked appointments. A cancelled demo visit is saved as a stored copy
+// with the same id, and that copy replaces the demo one.
 function getAppointments(): Appointment[] {
-  return [...DEMO_APPOINTMENTS, ...getStoredAppointments()]
+  const stored = getStoredAppointments()
+  const storedIds = new Set(stored.map((a) => a.id))
+  return [...DEMO_APPOINTMENTS.filter((a) => !storedIds.has(a.id)), ...stored]
 }
 
 export function getPatientAppointments(patientId: string): Appointment[] {
   return getAppointments().filter((a) => a.patientId === patientId)
+}
+
+// Every visit of a doctor, at all their clinics (doctor dashboard)
+export function getDoctorAppointments(doctorId: string): Appointment[] {
+  return getAppointments().filter((a) => a.doctorId === doctorId)
+}
+
+// Every visit at a clinic, for the clinic dashboard
+export function getClinicAppointments(clinicId: string): Appointment[] {
+  return getAppointments().filter((a) => a.clinicId === clinicId)
 }
 
 // Times the doctor is already taken on that date, at any clinic (a doctor can't be in two places)
@@ -95,11 +108,25 @@ export function canCancel(appointment: Appointment): boolean {
 
 // Only the patient who booked can cancel
 export function cancelAppointment(appointmentId: string, patientId: string): void {
-  writeJSON(
-    APPOINTMENTS_KEY,
-    getStoredAppointments().map((a) =>
-      a.id === appointmentId && a.patientId === patientId && canCancel(a) ? { ...a, status: 'cancelled' } : a,
-    ),
+  const appointment = getAppointments().find((a) => a.id === appointmentId && a.patientId === patientId)
+  if (!appointment || !canCancel(appointment)) return
+
+  saveCancelled([appointment], 'patient')
+}
+
+// Saves visits as cancelled. Demo visits get a stored copy that replaces them.
+function saveCancelled(visits: Appointment[], by: 'patient' | 'clinic'): void {
+  const changed = new Map(visits.map((a) => [a.id, { ...a, status: 'cancelled' as const, cancelledBy: by }]))
+  const stored = getStoredAppointments().map((a) => changed.get(a.id) ?? a)
+  const added = [...changed.values()].filter((a) => !stored.some((s) => s.id === a.id))
+  writeJSON(APPOINTMENTS_KEY, [...stored, ...added])
+}
+
+// The clinic removed the doctor: their upcoming visits there are cancelled
+export function cancelDoctorVisits(clinicId: string, doctorId: string): void {
+  saveCancelled(
+    getClinicAppointments(clinicId).filter((a) => a.doctorId === doctorId && isUpcoming(a)),
+    'clinic',
   )
 }
 

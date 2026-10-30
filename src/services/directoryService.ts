@@ -1,4 +1,3 @@
-import type { SelectOption } from '../constants/authFields'
 import type { PublicClinic, PublicDoctor, SpecialtyCount } from '../interface/directory'
 import type { Clinic, Doctor } from '../interface/user'
 import { getUsers } from './authService'
@@ -11,17 +10,17 @@ export function getDoctors(): PublicDoctor[] {
     .map(({ password: _password, email: _email, ...doctor }) => doctor)
 }
 
+// Doctors shown on the public lists: verified at one clinic at least.
+// A doctor removed from all their clinics is hidden, but their account and history stay.
+export function getListedDoctors(): PublicDoctor[] {
+  return getDoctors().filter((doctor) => doctor.clinics.some((m) => m.status === 'verified'))
+}
+
 export function getClinics(): PublicClinic[] {
   return getUsers()
     .filter((user): user is Clinic => user.role === 'clinic')
     .map(({ password: _password, email: _email, ...clinic }) => clinic)
 }
-
-// Clinics as <select> options for the doctor sign-up form
-export function getClinicOptions(): SelectOption[] {
-  return getClinics().map((clinic) => ({ value: clinic.id, label: `${clinic.clinicName} — ${clinic.city}` }))
-}
-
 
 export function getClinic(id: string): PublicClinic | undefined {
   return getClinics().find((clinic) => clinic.id === id)

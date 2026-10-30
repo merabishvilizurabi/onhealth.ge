@@ -6,7 +6,7 @@ import { SpecialtyList } from '../../components/home/SpecialtyList'
 import { Input } from '../../components/ui/Input'
 import { useCity } from '../../hooks/useCity'
 import { PATHS } from '../../router/paths'
-import { getClinics, getDoctors, getSpecialties, getVerifiedClinics, getVerifiedDoctors } from '../../services/directoryService'
+import { getClinics, getListedDoctors, getSpecialties, getVerifiedClinics, getVerifiedDoctors } from '../../services/directoryService'
 import { getDoctorSummary } from '../../services/doctorSummaryService'
 import { recommendationScore } from '../../services/recommendationService'
 import { matchesQuery } from '../../utils/search'
@@ -17,7 +17,7 @@ export function Home() {
   const { city } = useCity()
 
   // Read once when the page opens
-  const [doctors] = useState(getDoctors)
+  const [doctors] = useState(getListedDoctors)
   const [clinics] = useState(getClinics)
   const specialties = useMemo(() => getSpecialties(doctors), [doctors])
   // Each doctor's verified clinics, and the summary shown on the card

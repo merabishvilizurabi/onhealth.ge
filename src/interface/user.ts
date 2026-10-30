@@ -33,6 +33,7 @@ export interface DoctorService {
 export interface Doctor extends BaseUser {
   role: 'doctor'
   fullName: string
+  phone: string // shown to the doctor's patients and clinics
   specialty: string
   experienceYears: number
   clinics: ClinicMembership[]

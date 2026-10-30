@@ -3,7 +3,7 @@ import { DoctorCard } from '../../../components/doctors/DoctorCard'
 import { Input } from '../../../components/ui/Input'
 import { Select } from '../../../components/ui/Select'
 import type { SelectOption } from '../../../constants/authFields'
-import { getClinics, getDoctors, getSpecialties, getVerifiedClinics } from '../../../services/directoryService'
+import { getClinics, getListedDoctors, getSpecialties, getVerifiedClinics } from '../../../services/directoryService'
 import { getDoctorSummary } from '../../../services/doctorSummaryService'
 import { matchesQuery } from '../../../utils/search'
 import { addDays, toDateKey } from '../../../utils/time'
@@ -39,7 +39,7 @@ export function DoctorsPage() {
   // Read once when the page opens, with each doctor's verified clinics and card summary
   const [rows] = useState(() => {
     const clinics = getClinics()
-    return getDoctors().map((doctor) => {
+    return getListedDoctors().map((doctor) => {
       const doctorClinics = getVerifiedClinics(doctor, clinics)
       return { doctor, clinics: doctorClinics, summary: getDoctorSummary(doctor, doctorClinics) }
     })

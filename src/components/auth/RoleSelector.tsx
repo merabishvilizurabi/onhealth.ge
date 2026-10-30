@@ -1,13 +1,13 @@
-import { ROLE_LABELS, ROLES, type Role } from '../../constants/roles'
+import { ROLE_LABELS, SIGN_UP_ROLES, type SignUpRole } from '../../constants/roles'
 
 interface RoleSelectorProps {
-  value: Role
-  onChange: (role: Role) => void
+  value: SignUpRole
+  onChange: (role: SignUpRole) => void
 }
 export function RoleSelector({ value, onChange }: RoleSelectorProps) {
   return (
-    <div role="radiogroup" aria-label="ანგარიშის ტიპი" className="grid grid-cols-3 gap-2">
-      {ROLES.map((role) => {
+    <div role="radiogroup" aria-label="ანგარიშის ტიპი" className="grid grid-cols-2 gap-2">
+      {SIGN_UP_ROLES.map((role) => {
         const selected = role === value
         return (
           <button

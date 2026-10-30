@@ -5,8 +5,9 @@ export const PATHS = {
   signIn: '/sign-in',
   signUp: '/sign-up',
   doctorDashboard: '/doctor',
-  doctorSchedule: '/doctor/schedule',
   clinicDashboard: '/clinic',
+  clinicDoctor: '/clinic/doctors/:id',
+  clinicStats: '/clinic/stats',
   doctors: '/doctors',
   doctorProfile: '/doctors/:id',
   clinicProfile: '/clinics/:id',
@@ -16,6 +17,7 @@ export const PATHS = {
 
 export const doctorProfilePath = (id: string) => `/doctors/${id}`
 export const clinicProfilePath = (id: string) => `/clinics/${id}`
+export const clinicDoctorPath = (id: string) => `/clinic/doctors/${id}` // a doctor's page inside the clinic dashboard
 // The booking page for a chosen clinic, date and time
 export const bookingPath = (doctorId: string, slot: { clinic: string; date: string; time: string }) =>
   `/book/${doctorId}?${new URLSearchParams(slot)}`

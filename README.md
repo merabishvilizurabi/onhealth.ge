@@ -1,32 +1,126 @@
-# React + TypeScript + Vite
+# 🩺 OnHealth.ge — ექიმთან ვიზიტი ონლაინ
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+🔗 **Live Demo:** ეშვება ლოკალურად (იხ. [გაშვების ინსტრუქცია](#️-ლოკალურად-გაშვების-ინსტრუქცია))
+📂 **კატეგორია:** სამედიცინო ჰაბი — ექიმთან ვიზიტის დაჯავშნის პლატფორმა
+💻 **რეპოზიტორია:** [github.com/merabishvilizurabi/onhealth.ge](https://github.com/merabishvilizurabi/onhealth.ge)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📋 პროექტის შესახებ
 
-## React Compiler
+**OnHealth.ge** არის React-ზე დაფუძნებული ვებ-აპლიკაცია, რომელიც აერთიანებს პაციენტებს, ექიმებსა და კლინიკებს ერთ სივრცეში. პაციენტი პოულობს ექიმს თავის ქალაქში, ხედავს მის თავისუფალ დროს, ფასებსა და შეფასებებს და ვიზიტს რამდენიმე წამში ჯავშნის — დარეკვისა და რიგში ლოდინის გარეშე. ექიმი მართავს თავის განრიგს, ხედავს ვიზიტებს და ვიზიტის შემდეგ წერს დიაგნოზსა და დანიშნულებას, რომელსაც პაციენტი თავის პროფილზე ნახულობს. კლინიკა ამატებს და მართავს თავის ექიმებს და ადევნებს თვალს შემოსავალს.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+![OnHealth.ge — მთავარი გვერდი](docs/screenshot-home.png)
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## ✨ ძირითადი ფუნქციონალი
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- **სამი როლი, დაცული გვერდები:** პაციენტი, ექიმი და კლინიკა. თითოეულს აქვს საკუთარი გვერდები (`ProtectedRoute` როლის შემოწმებით) და საკუთარი ფერი (CSS ცვლადები `data-role` ატრიბუტით: ლურჯი / მწვანე / წითელი).
+- **მონაცემთა მართვა (CRUD) და `localStorage`:** ვიზიტის დაჯავშნა და გაუქმება, შეფასების დაწერა / რედაქტირება / წაშლა, ექიმის დამატება / წაშლა კლინიკიდან, დიაგნოზისა და დანიშნულების ჩაწერა, პროფილებისა და პაროლის შეცვლა — ყველაფერი ინახება `localStorage`-ში სერვისების ფენის (`services/`) გავლით.
+- **დემო მონაცემების Fallback:** კლინიკები, ექიმები, ვიზიტები და შეფასებები ჩაშენებულია კოდში და წაკითხვისას ერწყმის `localStorage`-ის მონაცემებს, ამიტომ საიტი ცარიელ ბრაუზერშიც სავსეა. ბოლო და მომავალი დემო ვიზიტები ავტომატურად მიჰყვება კალენდარს. დაზიანებული `localStorage` ჩანაწერები გამოტოვებულია (`try/catch` + ველების შემოწმება).
+- **ძიება და ფილტრაცია:** ძიება სახელით, სპეციალობით და ქალაქით; ექიმების გვერდზე ფილტრები (სპეციალობა, ქალაქი, კლინიკა, თავისუფალი დრო, ფასი, რეიტინგი) და დალაგება; გამოთვლები მემოიზებულია `useMemo`-ით.
+- **რეკომენდაციები:** მთავარ გვერდზე ექიმები ლაგდება ქულით (რეიტინგი 60% + უახლოესი თავისუფალი დრო 40%) მომხმარებლის არჩეულ ქალაქში.
+- **დაჯავშნის ლოგიკა:** 30-წუთიანი ვიზიტები 14 დღით ადრე; დაკავებული დრო ნაცრისფერია; ექიმის დრო იბლოკება ყველა კლინიკაში ერთდროულად; შენახვამდე დრო ხელახლა მოწმდება, ასე რომ ერთი და იგივე დრო ორჯერ ვერ დაიჯავშნება; გაუქმება შესაძლებელია ვიზიტამდე 2 საათით ადრე.
+- **ფორმების ვალიდაცია (Zod):** რეგისტრაცია, შესვლა, დაჯავშნა, შეფასება, დიაგნოზი, პროფილები, სერვისები და ფასები — ქართული შეცდომის ტექსტებით.
+- **ექიმის პანელი:** ვიზიტები, კვირის კალენდარი, სამუშაო საათები თითოეულ კლინიკაში, შემოსავლის გრაფიკი, სერვისებისა და ფასების მართვა.
+- **კლინიკის პანელი:** ექიმის დამატება (ახალი ან უკვე რეგისტრირებული ელ. ფოსტით), დადასტურება და წაშლა (მომავალი ვიზიტები ავტომატურად უქმდება), სტატისტიკა — შემოსავალი დღეების მიხედვით (7 / 30 დღე), ექიმების რეიტინგი, პოპულარული სერვისები.
+- **UX დეტალები:** მოქმედების დადასტურება გვერდზევე (ბრაუზერის `confirm`-ის გარეშე), გვერდებად დაყოფა (`usePagination`), სტუმარი დაჯავშნისას გადადის შესვლაზე და შემდეგ ბრუნდება იმავე დროზე.
+- **Responsive დიზაინი:** Tailwind-ის `sm` / `md` / `lg` ბადეები — ბარათები და პანელები მობილურზე ერთ სვეტად ლაგდება, თარიღების ზოლი გვერდულად სქროლდება.
+- **ხელმისაწვდომობა:** `aria` ატრიბუტები (`role="radiogroup"`, `aria-pressed`, `aria-current`), შეცდომები დაკავშირებულია ველებთან `aria-describedby`-ით.
+
+---
+
+## 🛠️ ტექნოლოგიური სტეკი
+
+| კატეგორია | გამოყენებული ტექნოლოგია |
+| :--- | :--- |
+| **Core** | React 19, Vite, TypeScript |
+| **State Management** | Context API (`AuthContext`, `CityContext`) + `localStorage` |
+| **Forms & Validation** | Zod |
+| **Routing** | React Router (დაცული და სტუმრის მარშრუტები, `useSearchParams`) |
+| **Styling** | Tailwind CSS v4, CSS ცვლადები როლების ფერებისთვის |
+| **Linting** | Oxlint |
+
+---
+
+## 📁 პროექტის სტრუქტურა
+
+```text
+src/
+├── components/     # ხელახლა გამოყენებადი კომპონენტები
+│   ├── ui/         #   Button, Input, Select, Pagination
+│   ├── booking/    #   დაჯავშნის პანელი (კლინიკა → თარიღი → დრო)
+│   ├── clinic/     #   კლინიკის ფორმები და ვიზიტების სია
+│   ├── doctor/     #   დიაგნოზის ფორმა, კალენდარი, პროფილის ფორმა
+│   ├── stats/      #   შემოსავლის გრაფიკი
+│   └── ...         #   ბარათები, შეფასებები, header / footer
+├── constants/      # ფორმის ველები, როლები, განრიგის პარამეტრები
+├── context/        # ავტორიზაციისა და ქალაქის კონტექსტები
+├── data/           # დემო მონაცემები (კლინიკები, ექიმები, ვიზიტები, შეფასებები)
+├── hooks/          # useAuth, useCity, usePagination
+├── interface/      # TypeScript ტიპები (მომხმარებელი, ვიზიტი, შეფასება ...)
+├── layouts/        # მთავარი და ავტორიზაციის გვერდების ჩარჩო
+├── pages/
+│   ├── auth/       #   შესვლა, რეგისტრაცია
+│   ├── main/       #   პაციენტისთვის: მთავარი, ექიმები, კლინიკები, დაჯავშნა, პროფილი
+│   ├── doctor/     #   ექიმის პანელი
+│   └── clinic/     #   კლინიკის პანელი და სტატისტიკა
+├── router/         # მარშრუტები, ProtectedRoute, GuestRoute
+├── services/       # ბიზნეს-ლოგიკა და localStorage (ავტორიზაცია, ვიზიტები, სტატისტიკა ...)
+├── utils/          # თარიღები და დრო, ძიება
+└── validation/     # Zod სქემები
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+## ⚙️ ლოკალურად გაშვების ინსტრუქცია
+
+1. **დააკლონირეთ რეპოზიტორია:**
+   ```bash
+   git clone https://github.com/merabishvilizurabi/onhealth.ge.git
+   cd onhealth.ge
+   ```
+2. **დააყენეთ პაკეტები:**
+   ```bash
+   npm install
+   ```
+3. **გაუშვით დეველოპერული სერვერი:**
+   ```bash
+   npm run dev
+   ```
+   გახსენით ბრაუზერში: `http://localhost:5173`
+
+**მონაცემების განულება:** ბრაუზერის კონსოლში `localStorage.clear()` და გვერდის განახლება — ტესტისას დამატებული ყველაფერი წაიშლება, დემო მონაცემები დარჩება.
+
+---
+
+## 🔐 სატესტო ანგარიშები
+
+ყველა ანგარიშის პაროლი: **`demo1234`**
+
+| როლი | ელფოსტა | პაროლი |
+| :--- | :--- | :--- |
+| **პაციენტი** | `patient@demo.onhealth.ge` | `demo1234` |
+| **ექიმი** | `doctor1@demo.onhealth.ge` | `demo1234` |
+| **კლინიკა** | `central@demo.onhealth.ge` | `demo1234` |
+
+დამატებითი ანგარიშები: პაციენტები `lasha@`, `eka@`, `giorgi@`, `nata@`, `sopo@`, `tea@`; ექიმები `doctor2@` … `doctor8@`; კლინიკები `seaside@`, `imereti@`, `vake@` (ყველა `@demo.onhealth.ge`).
+
+**სადემონსტრაციო სცენარი:** პაციენტს (`patient@`) და ექიმს (`doctor1@`) აქვთ ბოლო დღეებში ჩატარებული ვიზიტი დიაგნოზის გარეშე — ექიმი წერს დიაგნოზს თავის პანელზე, პაციენტი ხედავს მას პროფილზე და წერს შეფასებას. `vake@` კლინიკაში ერთი ექიმი დადასტურებას ელოდება.
+
+---
+
+## 📜 ხელმისაწვდომი სკრიპტები
+
+- `npm run dev` — დეველოპერული სერვერის გაშვება;
+- `npm run build` — ტიპების შემოწმება (`tsc -b`) და საწარმოო (Production) ვერსიის აწყობა `dist/` საქაღალდეში;
+- `npm run preview` — აწყობილი ვერსიის ლოკალურად გაშვება;
+- `npm run lint` — კოდის შემოწმება Oxlint-ით.
+
+---
+
+## 👤 ავტორები
+
+- **[სახელი გვარი]** — [GitHub პროფილი](https://github.com/merabishvilizurabi)
+- **[გუნდის წევრის სახელი გვარი]** — [GitHub პროფილი](https://github.com/)

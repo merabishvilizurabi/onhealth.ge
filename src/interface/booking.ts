@@ -29,6 +29,7 @@ export interface Appointment {
   date: string // "YYYY-MM-DD"
   time: string // "HH:MM"
   status: AppointmentStatus
+  cancelledBy?: 'patient' | 'clinic' // set when cancelled; the clinic cancels when it removes the doctor
   createdAt: string
   // Chosen on the booking page. Demo visits and older bookings don't have them.
   service?: DoctorService

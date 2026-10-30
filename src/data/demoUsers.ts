@@ -86,6 +86,7 @@ const doctor = (
   password: DEMO_PASSWORD,
   createdAt: CREATED_AT,
   fullName,
+  phone: `599 10 20 ${String(id).padStart(2, '0')}`,
   specialty,
   experienceYears,
   clinics,
