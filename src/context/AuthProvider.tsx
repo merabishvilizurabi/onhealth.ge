@@ -42,6 +42,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (result.ok) setUser(result.user)
         return result
       },
+      // Clinic dashboard. The header name updates right away.
+      updateClinic: (data) => {
+        if (!user) return { ok: false, error: 'შედით ანგარიშზე' }
+        const result = authService.updateClinic(user.id, data)
+        if (result.ok) setUser(result.user)
+        return result
+      },
+      // Doctor dashboard. The header name updates right away.
+      updateDoctor: (data) => {
+        if (!user) return { ok: false, error: 'შედით ანგარიშზე' }
+        const result = authService.updateDoctor(user.id, data)
+        if (result.ok) setUser(result.user)
+        return result
+      },
     }),
     [user],
   )

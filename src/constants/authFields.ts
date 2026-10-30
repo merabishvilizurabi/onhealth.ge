@@ -1,4 +1,4 @@
-import type { Role } from './roles'
+import type { SignUpRole } from './roles'
 
 export interface SelectOption {
   value: string
@@ -12,8 +12,6 @@ export interface FieldConfig {
   autoComplete?: string
   placeholder?: string
   options?: SelectOption[]
-  // Options that are only known at runtime (e.g. the list of registered clinics)
-  optionsFrom?: 'clinics'
   emptyOption?: string
 }
 
@@ -42,7 +40,16 @@ const passwords: FieldConfig[] = [
 ]
 
 
-export const SIGN_UP_FORM: Record<Role, FormSection[]> = {
+// Clinic details: on the sign-up form and on the clinic dashboard's edit form
+export const CLINIC_INFO_FIELDS: FieldConfig[] = [
+  { name: 'clinicName', label: 'კლინიკის დასახელება', autoComplete: 'organization' },
+  { name: 'city', label: 'ქალაქი', autoComplete: 'address-level2' },
+  { name: 'address', label: 'მისამართი', autoComplete: 'street-address' },
+  { ...phone, label: 'კლინიკის ტელეფონი', placeholder: '5XX XX XX XX ან 32 2XX XX XX' },
+  { name: 'specialty', label: 'პროფილი / სპეციალიზაცია', placeholder: 'მაგ. მრავალპროფილიანი' },
+]
+
+export const SIGN_UP_FORM: Record<SignUpRole, FormSection[]> = {
   patient: [
     {
       fields: [
@@ -54,48 +61,32 @@ export const SIGN_UP_FORM: Record<Role, FormSection[]> = {
     },
   ],
 
-  doctor: [
-    { title: 'ანგარიშის მონაცემები', fields: [fullName, email, ...passwords] },
-    {
-      title: 'ექიმის ინფორმაცია',
-      fields: [
-        { name: 'specialty', label: 'სპეციალობა', placeholder: 'მაგ. კარდიოლოგი' },
-        { name: 'experienceYears', label: 'გამოცდილება (წელი)', type: 'number' },
-        {
-          name: 'clinicId',
-          label: 'კლინიკა',
-          type: 'select',
-          optionsFrom: 'clinics',
-          emptyOption: 'აირჩიეთ კლინიკა',
-        },
-        { name: 'price', label: 'კონსულტაციის ფასი (₾)', type: 'number', placeholder: 'მაგ. 50' },
-      ],
-      note: 'კლინიკა დაადასტურებს თქვენს ანგარიშს. სხვა კლინიკებს მოგვიანებით დაამატებთ პროფილიდან.',
-    },
-    {
-      title: 'ჩემ შესახებ (არასავალდებულო)',
-      fields: [
-        { name: 'bio', label: 'მოკლე აღწერა', placeholder: 'რას მკურნალობთ, რა მომსახურებას სთავაზობთ' },
-        { name: 'education', label: 'განათლება', placeholder: 'მაგ. თსსუ, კარდიოლოგია' },
-        { name: 'languages', label: 'ენები', placeholder: 'ქართული, ინგლისური' },
-      ],
-    },
-  ],
-
   clinic: [
-    {
-      title: 'კლინიკის ინფორმაცია',
-      fields: [
-        { name: 'clinicName', label: 'კლინიკის დასახელება', autoComplete: 'organization' },
-        { name: 'city', label: 'ქალაქი', autoComplete: 'address-level2' },
-        { name: 'address', label: 'მისამართი', autoComplete: 'street-address' },
-        { ...phone, label: 'კლინიკის ტელეფონი', placeholder: '5XX XX XX XX ან 32 2XX XX XX' },
-        { name: 'specialty', label: 'პროფილი / სპეციალიზაცია', placeholder: 'მაგ. მრავალპროფილიანი' },
-      ],
-    },
+    { title: 'კლინიკის ინფორმაცია', fields: CLINIC_INFO_FIELDS },
     {
       title: 'ანგარიშის მონაცემები',
       fields: [{ ...email, label: 'კლინიკის ელ. ფოსტა' }, ...passwords],
     },
   ],
 }
+
+// The form a clinic fills in to add a doctor (clinic dashboard). The doctor signs in with this email and password.
+export const DOCTOR_FORM: FormSection[] = [
+  { title: 'ანგარიშის მონაცემები', fields: [fullName, phone, email, ...passwords] },
+  {
+    title: 'ექიმის ინფორმაცია',
+    fields: [
+      { name: 'specialty', label: 'სპეციალობა', placeholder: 'მაგ. კარდიოლოგი' },
+      { name: 'experienceYears', label: 'გამოცდილება (წელი)', type: 'number' },
+      { name: 'price', label: 'კონსულტაციის ფასი (₾)', type: 'number', placeholder: 'მაგ. 50' },
+    ],
+  },
+  {
+    title: 'ექიმის შესახებ (არასავალდებულო)',
+    fields: [
+      { name: 'bio', label: 'მოკლე აღწერა', placeholder: 'რას მკურნალობს, რა მომსახურებას სთავაზობს' },
+      { name: 'education', label: 'განათლება', placeholder: 'მაგ. თსსუ, კარდიოლოგია' },
+      { name: 'languages', label: 'ენები', placeholder: 'ქართული, ინგლისური' },
+    ],
+  },
+]

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { Outlet, useLocation } from 'react-router'
-import type { Role } from '../constants/roles'
+import type { SignUpRole } from '../constants/roles'
 import { PATHS } from '../router/paths'
 
 export interface AuthLayoutContext {
-  role: Role
-  setRole: (role: Role) => void
+  role: SignUpRole
+  setRole: (role: SignUpRole) => void
 }
 export function AuthLayout() {
-  const [role, setRole] = useState<Role>('patient')
+  const [role, setRole] = useState<SignUpRole>('patient')
   const { pathname } = useLocation()
   const width = pathname === PATHS.signUp ? 'max-w-md md:max-w-3xl lg:max-w-4xl' : 'max-w-md'
 

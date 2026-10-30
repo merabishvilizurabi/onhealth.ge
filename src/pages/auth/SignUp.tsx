@@ -5,12 +5,11 @@ import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Select } from '../../components/ui/Select'
 import { SIGN_UP_FORM, type FieldConfig } from '../../constants/authFields'
-import type { Role } from '../../constants/roles'
+import type { SignUpRole } from '../../constants/roles'
 import { useAuth } from '../../hooks/useAuth'
 import type { FormValues } from '../../interface/user'
 import type { AuthLayoutContext } from '../../layouts/AuthLayout'
 import { PATHS } from '../../router/paths'
-import { getClinicOptions } from '../../services/directoryService'
 import { signUpSchema, validate, type FormErrors } from '../../validation/authValidation'
 
 export function SignUp() {
@@ -21,10 +20,8 @@ export function SignUp() {
   const [values, setValues] = useState<FormValues>({})
   const [errors, setErrors] = useState<FormErrors>({})
   const [formError, setFormError] = useState('')
-  // Read once when the page opens: demo clinics + clinics registered in this browser
-  const [clinicOptions] = useState(getClinicOptions)
 
-  function handleRoleChange(next: Role) {
+  function handleRoleChange(next: SignUpRole) {
     setRole(next)
     setErrors({})
     setFormError('')
@@ -61,7 +58,7 @@ export function SignUp() {
         <Select
           key={field.name}
           {...common}
-          options={field.optionsFrom === 'clinics' ? clinicOptions : (field.options ?? [])}
+          options={field.options ?? []}
           emptyOption={field.emptyOption}
           onChange={(event) => updateValue(field.name, event.currentTarget.value)}
         />

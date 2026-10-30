@@ -1,7 +1,14 @@
 import { ROLES, type Role } from '../constants/roles'
 import { DEMO_USERS } from '../data/demoUsers'
-import type { Patient, User } from '../interface/user'
-import type { PasswordData, ProfileData, SignUpData } from '../validation/authValidation'
+import type { Clinic, Doctor, Patient, User } from '../interface/user'
+import type {
+  ClinicInfoData,
+  DoctorData,
+  DoctorProfileData,
+  PasswordData,
+  ProfileData,
+  SignUpData,
+} from '../validation/authValidation'
 import { readJSON, removeKey, writeJSON } from './storage'
 
 const USERS_KEY = 'onhealth.users'
@@ -36,6 +43,7 @@ function getStoredUsers(): User[] {
         ? {
             ...user,
             clinics: user.clinics ?? [],
+            phone: user.phone ?? '',
             // fields added later: older doctor accounts don't have them
             bio: user.bio ?? '',
             education: user.education ?? '',
@@ -55,7 +63,7 @@ export function getUsers(): User[] {
 }
 
 // Saves a changed account: replaces the stored copy, or adds one (first edit of a demo account)
-function saveUser(user: User): void {
+export function saveUser(user: User): void {
   const stored = getStoredUsers()
   const exists = stored.some((u) => u.id === user.id)
   writeJSON(USERS_KEY, exists ? stored.map((u) => (u.id === user.id ? user : u)) : [...stored, user])
@@ -77,20 +85,6 @@ function buildUser(data: SignUpData): User {
   switch (data.role) {
     case 'patient':
       return { ...base, role: 'patient', fullName: data.fullName, phone: data.phone }
-    case 'doctor':
-      return {
-        ...base,
-        role: 'doctor',
-        fullName: data.fullName,
-        specialty: data.specialty,
-        experienceYears: data.experienceYears,
-        // The chosen clinic still has to verify the doctor
-        clinics: [{ clinicId: data.clinicId, status: 'pending', joinedAt: now }],
-        bio: data.bio,
-        education: data.education,
-        languages: data.languages,
-        services: [{ name: 'კონსულტაცია', price: data.price }],
-      }
     case 'clinic':
       return {
         ...base,
@@ -111,14 +105,46 @@ export function signUp(data: SignUpData): AuthResult {
     return { ok: false, error: 'ამ ელ. ფოსტით ანგარიში უკვე არსებობს' }
   }
 
-  if (data.role === 'doctor' && !users.some((user) => user.role === 'clinic' && user.id === data.clinicId)) {
-    return { ok: false, error: 'არჩეული კლინიკა ვერ მოიძებნა' }
-  }
-
   const user = buildUser(data)
   writeJSON(USERS_KEY, [...getStoredUsers(), user])
   writeJSON(SESSION_KEY, user.id)
   return { ok: true, user }
+}
+
+// A clinic adds a new doctor (clinic dashboard). Expects data already validated by doctorSchema.
+// The doctor is verified at that clinic right away and signs in with the given email and password.
+// A doctor who already has an account is added with linkDoctor() in clinicService instead.
+export function addDoctor(clinicId: string, data: DoctorData): AuthResult {
+  const existing = getUsers().find((user) => user.email === data.email)
+  if (existing) {
+    return {
+      ok: false,
+      error:
+        existing.role === 'doctor'
+          ? 'ეს ექიმი უკვე რეგისტრირებულია. აირჩიეთ „უკვე რეგისტრირებული ექიმი“ და დაამატეთ ელ. ფოსტით.'
+          : 'ამ ელ. ფოსტით ანგარიში უკვე არსებობს',
+    }
+  }
+
+  const now = new Date().toISOString()
+  const doctor: Doctor = {
+    id: crypto.randomUUID(),
+    role: 'doctor',
+    email: data.email,
+    password: data.password,
+    createdAt: now,
+    fullName: data.fullName,
+    phone: data.phone,
+    specialty: data.specialty,
+    experienceYears: data.experienceYears,
+    clinics: [{ clinicId, status: 'verified', joinedAt: now }],
+    bio: data.bio,
+    education: data.education,
+    languages: data.languages,
+    services: [{ name: 'კონსულტაცია', price: data.price }],
+  }
+  writeJSON(USERS_KEY, [...getStoredUsers(), doctor])
+  return { ok: true, user: doctor }
 }
 
 export function signIn(email: string, password: string): AuthResult {
@@ -142,13 +168,33 @@ export function updateProfile(patientId: string, data: ProfileData): AuthResult 
   return { ok: true, user }
 }
 
-// Expects data already validated by passwordSchema
-export function changePassword(patientId: string, data: PasswordData): AuthResult {
-  const patient = findPatient(patientId)
-  if (!patient) return { ok: false, error: 'ანგარიში ვერ მოიძებნა' }
-  if (patient.password !== data.currentPassword) return { ok: false, error: 'მიმდინარე პაროლი არასწორია' }
+// Clinic dashboard: name, city, address, phone, profile. Expects data validated by clinicInfoSchema.
+export function updateClinic(clinicId: string, data: ClinicInfoData): AuthResult {
+  const clinic = getUsers().find((user): user is Clinic => user.role === 'clinic' && user.id === clinicId)
+  if (!clinic) return { ok: false, error: 'ანგარიში ვერ მოიძებნა' }
 
-  const user: Patient = { ...patient, password: data.password }
+  const user: Clinic = { ...clinic, ...data }
+  saveUser(user)
+  return { ok: true, user }
+}
+
+// Doctor dashboard: details and services. Expects data validated by doctorProfileSchema.
+export function updateDoctor(doctorId: string, data: DoctorProfileData): AuthResult {
+  const doctor = getUsers().find((user): user is Doctor => user.role === 'doctor' && user.id === doctorId)
+  if (!doctor) return { ok: false, error: 'ანგარიში ვერ მოიძებნა' }
+
+  const user: Doctor = { ...doctor, ...data }
+  saveUser(user)
+  return { ok: true, user }
+}
+
+// Any account (patient, doctor or clinic). Expects data already validated by passwordSchema.
+export function changePassword(userId: string, data: PasswordData): AuthResult {
+  const current = getUsers().find((user) => user.id === userId)
+  if (!current) return { ok: false, error: 'ანგარიში ვერ მოიძებნა' }
+  if (current.password !== data.currentPassword) return { ok: false, error: 'მიმდინარე პაროლი არასწორია' }
+
+  const user: User = { ...current, password: data.password }
   saveUser(user)
   return { ok: true, user }
 }

@@ -9,9 +9,10 @@ const MESSAGES = {
   confirmPassword: 'პაროლები არ ემთხვევა',
   phone: 'შეიყვანეთ 9-ნიშნა ნომერი, მაგ. 5XX XX XX XX',
   experience: 'შეიყვანეთ წლები 0-დან 70-მდე',
-  clinic: 'აირჩიეთ კლინიკა',
   price: 'შეიყვანეთ ფასი 1-დან 1000 ₾-მდე',
   tooLong: 'ტექსტი ძალიან გრძელია',
+  services: 'დაამატეთ ერთი სერვისი მაინც',
+  serviceNames: 'სერვისების სახელები არ უნდა მეორდებოდეს',
 }
 
 const text = () => z.string({ error: MESSAGES.required })
@@ -78,46 +79,74 @@ const patientSchema = z
   })
   .refine(passwordsMatch.check, passwordsMatch.options)
 
-const doctorSchema = z
-  .object({
-    role: z.literal('doctor'),
-    fullName,
-    ...accountFields,
-    specialty: requiredText,
-    experienceYears: requiredText
-      .transform(Number)
-      .pipe(
-        z
-          .number({ error: MESSAGES.experience })
-          .int(MESSAGES.experience)
-          .min(0, MESSAGES.experience)
-          .max(70, MESSAGES.experience),
-      ),
-    clinicId: text().min(1, MESSAGES.clinic),
-    price: requiredText
-      .transform(Number)
-      .pipe(z.number({ error: MESSAGES.price }).int(MESSAGES.price).min(1, MESSAGES.price).max(1000, MESSAGES.price)),
-    bio: optionalText(300),
-    education: optionalText(150),
-    languages: languageList,
-  })
-  .refine(passwordsMatch.check, passwordsMatch.options)
+// Clinic details: filled in at sign-up and editable later on the clinic dashboard
+const clinicInfoFields = {
+  clinicName: requiredText,
+  city: requiredText,
+  address: requiredText,
+  phone,
+  specialty: requiredText,
+}
 
 const clinicSchema = z
   .object({
     role: z.literal('clinic'),
-    clinicName: requiredText,
-    city: requiredText,
-    address: requiredText,
-    phone,
-    specialty: requiredText,
+    ...clinicInfoFields,
     ...accountFields,
   })
   .refine(passwordsMatch.check, passwordsMatch.options)
 
-export const signUpSchema = z.discriminatedUnion('role', [patientSchema, doctorSchema, clinicSchema])
+export const signUpSchema = z.discriminatedUnion('role', [patientSchema, clinicSchema])
 
 export type SignUpData = z.infer<typeof signUpSchema>
+
+export const clinicInfoSchema = z.object(clinicInfoFields)
+
+export type ClinicInfoData = z.infer<typeof clinicInfoSchema>
+
+const experienceYears = requiredText
+  .transform(Number)
+  .pipe(
+    z.number({ error: MESSAGES.experience }).int(MESSAGES.experience).min(0, MESSAGES.experience).max(70, MESSAGES.experience),
+  )
+
+const price = requiredText
+  .transform(Number)
+  .pipe(z.number({ error: MESSAGES.price }).int(MESSAGES.price).min(1, MESSAGES.price).max(1000, MESSAGES.price))
+
+// The doctor's public details: filled in by the clinic when adding the doctor, editable by the doctor later
+const doctorInfoFields = {
+  fullName,
+  phone,
+  specialty: requiredText,
+  experienceYears,
+  bio: optionalText(300),
+  education: optionalText(150),
+  languages: languageList,
+}
+
+// A clinic adds a doctor (clinic dashboard). The doctor is linked to that clinic, so there is no clinic field.
+export const doctorSchema = z
+  .object({
+    ...doctorInfoFields,
+    ...accountFields,
+    price,
+  })
+  .refine(passwordsMatch.check, passwordsMatch.options)
+
+export type DoctorData = z.infer<typeof doctorSchema>
+
+// Doctor dashboard: the doctor edits their details and services. Service names must differ,
+// because a booking remembers the service by its name.
+export const doctorProfileSchema = z.object({
+  ...doctorInfoFields,
+  services: z
+    .array(z.object({ name: requiredText.max(60, MESSAGES.tooLong), price }))
+    .min(1, MESSAGES.services)
+    .refine((list) => new Set(list.map((s) => s.name)).size === list.length, MESSAGES.serviceNames),
+})
+
+export type DoctorProfileData = z.infer<typeof doctorProfileSchema>
 
 // Profile page: a patient edits their name and phone (email stays the same, it is the sign-in)
 export const profileSchema = z.object({ fullName, phone })

@@ -126,6 +126,7 @@ function ClinicScheduleForm({ doctorId, clinic, membership }: { doctorId: string
   )
 }
 
+// Working hours per clinic. Shown as a tab of the doctor dashboard.
 export function DoctorSchedule() {
   const { user } = useAuth()
   const [clinics] = useState(getClinics)
@@ -134,13 +135,10 @@ export function DoctorSchedule() {
   const doctorId = user.id
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900">განრიგი</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          მიუთითეთ სამუშაო დღეები და საათები თითოეულ კლინიკაში. ვიზიტი გრძელდება {SLOT_MINUTES} წუთი.
-        </p>
-      </div>
+    <div className="flex max-w-3xl flex-col gap-6">
+      <p className="text-sm text-gray-500">
+        მიუთითეთ სამუშაო დღეები და საათები თითოეულ კლინიკაში. ვიზიტი გრძელდება {SLOT_MINUTES} წუთი.
+      </p>
 
       {user.clinics.length === 0 && <p className="text-sm text-gray-500">თქვენ ჯერ არცერთ კლინიკას არ ეკუთვნით.</p>}
 

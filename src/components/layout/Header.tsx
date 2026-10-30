@@ -16,40 +16,31 @@ export function Header() {
         </Link>
 
         <nav className="flex flex-wrap items-center gap-3 text-sm">
-          {/* The user's city: the main page shows doctors from this city */}
-          <select
-            aria-label="თქვენი ქალაქი"
-            value={city}
-            onChange={(event) => setCity(event.currentTarget.value)}
-            className="rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-          >
-            <option value="">ყველა ქალაქი</option>
-            {cities.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
+          {/* The user's city: the main page shows doctors from this city. Only for guests and patients. */}
+          {(!user || user.role === 'patient') && (
+            <select
+              aria-label="თქვენი ქალაქი"
+              value={city}
+              onChange={(event) => setCity(event.currentTarget.value)}
+              className="rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">ყველა ქალაქი</option>
+              {cities.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          )}
           {user ? (
             <>
-              {user.role === 'doctor' && (
-                <Link to={PATHS.doctorSchedule} className="font-medium text-gray-700 hover:text-primary">
-                  განრიგი
-                </Link>
-              )}
-              {user.role !== 'patient' && (
-                <Link to={HOME_BY_ROLE[user.role]} className="font-medium text-gray-700 hover:text-primary">
-                  პანელი
-                </Link>
-              )}
-              {/* A patient's name opens their profile (visits and account settings) */}
-              {user.role === 'patient' ? (
-                <Link to={PATHS.profile} className="font-medium text-gray-700 hover:text-primary">
-                  {getDisplayName(user)}
-                </Link>
-              ) : (
-                <span className="hidden text-gray-500 sm:inline">{getDisplayName(user)}</span>
-              )}
+              {/* The name opens the user's own page: a patient's profile, or the clinic / doctor dashboard */}
+              <Link
+                to={user.role === 'patient' ? PATHS.profile : HOME_BY_ROLE[user.role]}
+                className="font-medium text-gray-700 hover:text-primary"
+              >
+                {getDisplayName(user)}
+              </Link>
               <button
                 type="button"
                 onClick={signOut}

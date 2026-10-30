@@ -1,32 +1,83 @@
-# React + TypeScript + Vite
+# OnHealth.ge
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+ექიმთან ვიზიტის ონლაინ დაჯავშნის პლატფორმა. პაციენტი პოულობს ექიმს ან კლინიკას თავის ქალაქში, ირჩევს თავისუფალ დროს და ჯავშნის ვიზიტს. კლინიკები მართავენ თავიანთ ექიმებს, ექიმები კი თავიანთ ვიზიტებსა და განრიგს.
 
-Currently, two official plugins are available:
+ფინალური პროექტი. მონაცემები ინახება ბრაუზერის `localStorage`-ში, სერვერი არ არის.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## გაშვება
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # ტიპების შემოწმება და production build
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## სადემონსტრაციო ანგარიშები
+
+ყველა ანგარიშის პაროლი: **`demo1234`**
+
+| როლი | ელ. ფოსტა |
+|---|---|
+| პაციენტი | `patient@demo.onhealth.ge` (ასევე `lasha@`, `eka@`, `giorgi@`, `nata@`, `sopo@`, `tea@` + `demo.onhealth.ge`) |
+| ექიმი | `doctor1@demo.onhealth.ge` … `doctor8@demo.onhealth.ge` |
+| კლინიკა | `central@demo.onhealth.ge`, `seaside@`, `imereti@`, `vake@` + `demo.onhealth.ge` |
+
+სადემონსტრაციო მონაცემები (კლინიკები, ექიმები, ვიზიტები, შეფასებები) კოდშია და არასდროს იწერება `localStorage`-ში, ამიტომ საიტი ნებისმიერ კომპიუტერზე სავსეა. ბოლო და მომავალი ვიზიტების თარიღები ავტომატურად მიჰყვება კალენდარს.
+
+**თავიდან დაწყება:** ბრაუზერის კონსოლში `localStorage.clear()` და გვერდის განახლება — ტესტის დროს დამატებული ყველაფერი წაიშლება.
+
+## შესაძლებლობები
+
+### სტუმარი და პაციენტი
+- მთავარი გვერდი: ძებნა, სპეციალობები, რეკომენდებული ექიმები არჩეულ ქალაქში (რეიტინგისა და თავისუფალი დროის მიხედვით), კლინიკები
+- ექიმების გვერდი ფილტრებით (სპეციალობა, ქალაქი, კლინიკა, თავისუფალი დრო, ფასი, რეიტინგი) და დალაგებით
+- ექიმისა და კლინიკის პროფილები, შეფასებები
+- დაჯავშნა: კლინიკა → თარიღი → დრო (დაკავებული დრო ნაცრისფერია) → ვიზიტის ტიპი, მიზეზი, გადახდის მეთოდი
+- პროფილი (სახელზე დაჭერით): მომავალი ვიზიტები და გაუქმება (2 საათით ადრე), ისტორია, ექიმის დიაგნოზი და დანიშნულება, შეფასების დაწერა / რედაქტირება / წაშლა, ანგარიშის მონაცემები და პაროლი
+
+### ექიმი
+- ვიზიტები: დაგეგმილი და ჩატარებული, დიაგნოზისა და დანიშნულების დაწერა
+- კვირის კალენდარი, სამუშაო საათები თითოეულ კლინიკაში
+- შემოსავალი (7 / 30 დღე, გრაფიკი, კლინიკების მიხედვით)
+- პროფილი: ინფორმაცია, სერვისები და ფასები, პაროლი
+
+### კლინიკა
+- რეგისტრაცია მხოლოდ პაციენტსა და კლინიკას შეუძლია — ექიმს კლინიკა ამატებს
+- ექიმის დამატება (ახალი ანგარიში ან უკვე რეგისტრირებული ექიმი ელ. ფოსტით), დადასტურება, კლინიკიდან წაშლა
+- თითოეული ექიმის ვიზიტები, პაციენტების საკონტაქტო ინფორმაცია
+- სტატისტიკა: შემოსავალი დღეების მიხედვით, ექიმების რეიტინგი, პოპულარული სერვისები, გადახდის მეთოდები
+- კლინიკის ინფორმაციისა და პაროლის შეცვლა
+
+### წესები
+- ექიმი მუშაობს რამდენიმე კლინიკაში, მაგრამ მხოლოდ ერთ ქალაქში
+- ვიზიტი 30 წუთია, დაჯავშნა შესაძლებელია 14 დღით ადრე
+- ექიმის დრო იბლოკება ყველა კლინიკაში ერთდროულად
+- შეფასება მხოლოდ ჩატარებულ ვიზიტზეა შესაძლებელი
+
+## ტექნოლოგიები
+
+React 19, TypeScript, Vite, Tailwind CSS v4, React Router, Zod (ფორმების ვალიდაცია).
+
+ფერები როლის მიხედვით იცვლება (`index.css`): პაციენტი — ლურჯი, ექიმი — მწვანე, კლინიკა — წითელი.
+
+## სტრუქტურა
+
+```
+src/
+  components/   ხელახლა გამოყენებადი ნაწილები (ui, booking, clinic, doctor, profile, stats …)
+  constants/    ფორმის ველები, როლები, განრიგის პარამეტრები
+  context/      ავტორიზაცია და არჩეული ქალაქი
+  data/         სადემონსტრაციო მონაცემები
+  hooks/        useAuth, useCity, usePagination
+  interface/    TypeScript ტიპები
+  layouts/      მთავარი და ავტორიზაციის გვერდების ჩარჩო
+  pages/
+    auth/       შესვლა, რეგისტრაცია
+    main/       პაციენტისთვის: მთავარი, ექიმები, კლინიკები, დაჯავშნა, პროფილი
+    doctor/     ექიმის პანელი
+    clinic/     კლინიკის პანელი და სტატისტიკა
+  router/       მარშრუტები და დაცული გვერდები
+  services/     მონაცემებთან მუშაობა (localStorage)
+  utils/        დრო, ძებნა
+  validation/   Zod სქემები
+```
