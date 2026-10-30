@@ -17,7 +17,7 @@ export interface FieldConfig {
   emptyOption?: string
 }
 
-export interface FormSection {
+interface FormSection {
   title?: string
   note?: string
   fields: FieldConfig[]
@@ -68,8 +68,17 @@ export const SIGN_UP_FORM: Record<Role, FormSection[]> = {
           optionsFrom: 'clinics',
           emptyOption: 'აირჩიეთ კლინიკა',
         },
+        { name: 'price', label: 'კონსულტაციის ფასი (₾)', type: 'number', placeholder: 'მაგ. 50' },
       ],
       note: 'კლინიკა დაადასტურებს თქვენს ანგარიშს. სხვა კლინიკებს მოგვიანებით დაამატებთ პროფილიდან.',
+    },
+    {
+      title: 'ჩემ შესახებ (არასავალდებულო)',
+      fields: [
+        { name: 'bio', label: 'მოკლე აღწერა', placeholder: 'რას მკურნალობთ, რა მომსახურებას სთავაზობთ' },
+        { name: 'education', label: 'განათლება', placeholder: 'მაგ. თსსუ, კარდიოლოგია' },
+        { name: 'languages', label: 'ენები', placeholder: 'ქართული, ინგლისური' },
+      ],
     },
   ],
 

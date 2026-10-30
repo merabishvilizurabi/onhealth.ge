@@ -11,7 +11,8 @@ export function ProtectedRoute({ allow }: ProtectedRouteProps) {
   const location = useLocation()
 
   if (!user) {
-    const state: RedirectState = { from: location.pathname }
+    // keep ?query too, so e.g. the booking page opens again with the chosen time
+    const state: RedirectState = { from: location.pathname + location.search }
     return <Navigate to={PATHS.signIn} replace state={state} />
   }
 

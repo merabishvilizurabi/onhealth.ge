@@ -93,7 +93,7 @@ export function SignUp() {
       </div>
 
       <form noValidate onSubmit={handleSubmit} className="mt-6 flex flex-col gap-6">
-        <div className={hasManySections ? 'grid gap-6 md:grid-cols-2 md:gap-8' : ''}>
+        <div className={hasManySections ? 'grid gap-6 md:gap-8' : ''}>
           {sections.map((section, index) => (
             <fieldset key={section.title ?? index} className="min-w-0">
               {section.title && (

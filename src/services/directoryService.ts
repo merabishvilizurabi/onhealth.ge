@@ -22,12 +22,35 @@ export function getClinicOptions(): SelectOption[] {
   return getClinics().map((clinic) => ({ value: clinic.id, label: `${clinic.clinicName} — ${clinic.city}` }))
 }
 
-// Names of the clinics that have verified this doctor (pending links are not shown publicly)
-export function getVerifiedClinicNames(doctor: PublicDoctor, clinics: PublicClinic[]): string[] {
+
+export function getClinic(id: string): PublicClinic | undefined {
+  return getClinics().find((clinic) => clinic.id === id)
+}
+
+// Doctors this clinic has verified (pending doctors are not shown publicly)
+export function getVerifiedDoctors(clinicId: string, doctors: PublicDoctor[]): PublicDoctor[] {
+  return doctors.filter((doctor) =>
+    doctor.clinics.some((membership) => membership.clinicId === clinicId && membership.status === 'verified'),
+  )
+}
+
+// Cities where at least one verified doctor works (for the city picker in the header)
+export function getDoctorCities(): string[] {
+  const clinics = getClinics()
+  const cities = getDoctors().flatMap((doctor) => getVerifiedClinics(doctor, clinics).map((clinic) => clinic.city))
+  return [...new Set(cities)].sort((a, b) => a.localeCompare(b, 'ka'))
+}
+
+export function getDoctor(id: string): PublicDoctor | undefined {
+  return getDoctors().find((doctor) => doctor.id === id)
+}
+
+// The clinics that have verified this doctor (pending links are not shown publicly)
+export function getVerifiedClinics(doctor: PublicDoctor, clinics: PublicClinic[]): PublicClinic[] {
   return doctor.clinics
     .filter((membership) => membership.status === 'verified')
-    .map((membership) => clinics.find((clinic) => clinic.id === membership.clinicId)?.clinicName)
-    .filter((name): name is string => name !== undefined)
+    .map((membership) => clinics.find((clinic) => clinic.id === membership.clinicId))
+    .filter((clinic): clinic is PublicClinic => clinic !== undefined)
 }
 
 // Unique doctor specialties with how many doctors have each, most common first
