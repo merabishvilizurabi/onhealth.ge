@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 import type { Appointment } from '../../interface/booking'
 import type { VisitNote } from '../../interface/visitNote'
 import { saveVisitNote } from '../../services/visitNoteService'
@@ -20,7 +20,7 @@ export function VisitNoteForm({ doctorId, appointment, note, onSaved, onCancel }
   const [prescription, setPrescription] = useState(note?.prescription ?? '')
   const [errors, setErrors] = useState<FormErrors>({})
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     const validation = validate(visitNoteSchema, { diagnosis, prescription })
     if (!validation.success) {

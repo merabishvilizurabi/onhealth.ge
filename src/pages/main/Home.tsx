@@ -67,7 +67,7 @@ export function Home() {
             <p className="text-sm font-medium text-gray-900">
               {doctors.length} ექიმი · {clinics.length} კლინიკა · {cityCount} ქალაქი
             </p>
-            <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-gray-900 md:text-5xl">
+            <h1 className="text-4xl leading-tight font-bold tracking-tight text-gray-900 md:text-5xl">
               ექიმთან ვიზიტი — ონლაინ, რამდენიმე წამში
             </h1>
             <p className="max-w-xl text-gray-900 md:text-lg">

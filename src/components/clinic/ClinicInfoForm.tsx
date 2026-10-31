@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 import { CLINIC_INFO_FIELDS } from '../../constants/authFields'
 import { useAuth } from '../../hooks/useAuth'
 import type { Clinic, FormValues } from '../../interface/user'
@@ -24,7 +24,7 @@ export function ClinicInfoForm({ clinic, hasDoctors, onSaved, onCancel }: Clinic
   })
   const [errors, setErrors] = useState<FormErrors>({})
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     const validation = validate(clinicInfoSchema, values)
     if (!validation.success) {
