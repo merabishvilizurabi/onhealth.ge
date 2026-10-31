@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Outlet } from 'react-router'
 import { Footer } from '../components/layout/Footer'
 import { Header } from '../components/layout/Header'
@@ -9,7 +10,9 @@ export function MainLayout() {
       <div className="flex min-h-dvh flex-col bg-white">
         <Header />
         <main className="flex-1">
-          <Outlet />
+          <Suspense fallback={null}>
+            <Outlet />
+          </Suspense>
         </main>
         <Footer />
       </div>

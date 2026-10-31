@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 import { DOCTOR_FORM } from '../../constants/authFields'
 import type { Clinic, FormValues } from '../../interface/user'
 import { addDoctor } from '../../services/authService'
@@ -26,7 +26,7 @@ export function AddDoctorForm({ clinic, onAdded, onCancel }: AddDoctorFormProps)
   const [existingEmail, setExistingEmail] = useState('')
   const [errors, setErrors] = useState<FormErrors>({})
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (mode === 'existing') {

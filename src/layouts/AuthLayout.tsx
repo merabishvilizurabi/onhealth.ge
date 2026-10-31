@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import type { SignUpRole } from '../constants/roles'
 import { LogoMark } from '../components/layout/LogoMark'
@@ -21,7 +21,9 @@ export function AuthLayout() {
             <h1></h1>
             <p className="md:hidden mb-12 text-center text-4xl font-semibold text-primary transition-colors">OnHealth.ge</p>
             <div className="min-h-110 w-full overflow-hidden">
-              <Outlet context={{ role, setRole } satisfies AuthLayoutContext} />
+              <Suspense fallback={null}>
+                <Outlet context={{ role, setRole } satisfies AuthLayoutContext} />
+              </Suspense>
             </div>
           </div>
         </div>

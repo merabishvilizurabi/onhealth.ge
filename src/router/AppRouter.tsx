@@ -1,22 +1,24 @@
+import { lazy } from 'react'
 import { Route, Routes } from 'react-router'
 import { AuthLayout } from '../layouts/AuthLayout'
 import { MainLayout } from '../layouts/MainLayout'
-import { SignIn } from '../pages/auth/SignIn'
-import { SignUp } from '../pages/auth/SignUp'
-import { ClinicDashboard } from '../pages/clinic/ClinicDashboard'
-import { ClinicDoctor } from '../pages/clinic/ClinicDoctor'
-import { ClinicStats } from '../pages/clinic/ClinicStats'
-import { DoctorDashboard } from '../pages/doctor/DoctorDashboard'
-import { DoctorProfile } from '../pages/main/doctors/DoctorProfile'
-import { DoctorsPage } from '../pages/main/doctors/DoctorsPage'
-import { ClinicProfile } from '../pages/main/clinics/ClinicProfile'
 import { Home } from '../pages/main/Home'
 import { NotFound } from '../pages/NotFound'
-import { PatientProfile } from '../pages/main/profile/PatientProfile'
-import { BookingPage } from '../pages/main/booking/BookingPage'
 import { GuestRoute } from './GuestRoute'
 import { PATHS } from './paths'
 import { ProtectedRoute } from './ProtectedRoute'
+
+const SignIn = lazy(() => import('../pages/auth/SignIn').then((m) => ({ default: m.SignIn })))
+const SignUp = lazy(() => import('../pages/auth/SignUp').then((m) => ({ default: m.SignUp })))
+const ClinicDashboard = lazy(() => import('../pages/clinic/ClinicDashboard').then((m) => ({ default: m.ClinicDashboard })))
+const ClinicDoctor = lazy(() => import('../pages/clinic/ClinicDoctor').then((m) => ({ default: m.ClinicDoctor })))
+const ClinicStats = lazy(() => import('../pages/clinic/ClinicStats').then((m) => ({ default: m.ClinicStats })))
+const DoctorDashboard = lazy(() => import('../pages/doctor/DoctorDashboard').then((m) => ({ default: m.DoctorDashboard })))
+const DoctorProfile = lazy(() => import('../pages/main/doctors/DoctorProfile').then((m) => ({ default: m.DoctorProfile })))
+const DoctorsPage = lazy(() => import('../pages/main/doctors/DoctorsPage').then((m) => ({ default: m.DoctorsPage })))
+const ClinicProfile = lazy(() => import('../pages/main/clinics/ClinicProfile').then((m) => ({ default: m.ClinicProfile })))
+const PatientProfile = lazy(() => import('../pages/main/profile/PatientProfile').then((m) => ({ default: m.PatientProfile })))
+const BookingPage = lazy(() => import('../pages/main/booking/BookingPage').then((m) => ({ default: m.BookingPage })))
 
 export function AppRouter() {
   return (

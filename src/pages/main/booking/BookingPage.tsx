@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useState, type SubmitEvent, type ReactNode } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router'
 import { Button } from '../../../components/ui/Button'
 import { BOOKING_DAYS_AHEAD, SLOT_MINUTES } from '../../../constants/schedule'
@@ -81,7 +81,7 @@ function BookingForm({ doctor, clinic, date, time, onBooked }: BookingFormProps)
   const service = doctor.services.find((s) => s.name === serviceName)
   const backToDoctor = `${doctorProfilePath(doctor.id)}?clinic=${clinic.id}`
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (user?.role !== 'patient') return
 

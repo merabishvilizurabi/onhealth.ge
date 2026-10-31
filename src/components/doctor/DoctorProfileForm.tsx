@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import type { Doctor } from '../../interface/user'
 import { doctorProfileSchema, validate, type FormErrors } from '../../validation/authValidation'
@@ -34,7 +34,7 @@ export function DoctorProfileForm({ doctor }: { doctor: Doctor }) {
     setSaved(false)
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     const validation = validate(doctorProfileSchema, { ...values, services })
     if (!validation.success) {

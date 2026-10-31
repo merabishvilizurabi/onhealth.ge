@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useState, type ChangeEvent, type SubmitEvent } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { passwordSchema, validate, type FormErrors } from '../../validation/authValidation'
 import { Button } from '../ui/Button'
@@ -17,7 +17,7 @@ export function PasswordForm() {
     setValues((current) => ({ ...current, [field]: value }))
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     setSaved(false)
 
